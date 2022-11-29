@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
-project(Refactor)
+project(Robot)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Refactor main.cpp)
+add_executable(Robot main.cpp)
