@@ -14,9 +14,11 @@
 
 class SonnyRobot {
     const std::string ROBOT_NAME = "Sonny";
+    static const unsigned ENERGY_INIT = 10, POWER_INIT = 1;
 public:
     size_t x = 0,y = 0;
-    SonnyRobot(size_t width, size_t height, unsigned energy, unsigned power);
+    unsigned energy,power;
+    SonnyRobot(size_t width, size_t height, unsigned energy = ENERGY_INIT, unsigned power = POWER_INIT);
 
     void setCoords(size_t xCoord, size_t yCoord);
 

@@ -45,8 +45,6 @@ void setupRobotOnGrid(vector<SonnyRobot> &robots) {
         }
         freeCoords = true;
     }
-
-
 }
 
 int main() {
