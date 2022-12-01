@@ -20,7 +20,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include <librobots.h>
 
-class SonnyRobot : public Robot {
+class SonnyRobot : public Robot { //heritage public
     enum Action {
         NOTDEFINED,
         BOARD,
@@ -38,6 +38,7 @@ class SonnyRobot : public Robot {
     static Action resolveAction(std::string &action);
 
     std::vector<std::vector<std::string>> internalMap;
+
 public:
     void setConfig(size_t width, size_t height, unsigned energy, unsigned power) override;
 

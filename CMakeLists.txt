@@ -17,7 +17,7 @@ FetchContent_Declare(libdio
         )
 FetchContent_MakeAvailable(libdio)
 
-add_executable(Robot main.cpp robots/SonnyRobot.cpp robots/SonnyRobot.h)
+add_executable(Robot main.cpp robots/SonnyRobot.cpp robots/SonnyRobot.h game.cpp game.h)
 
 target_link_libraries(Robot PRIVATE libdio)
 target_link_libraries(Robot PRIVATE librobots)
