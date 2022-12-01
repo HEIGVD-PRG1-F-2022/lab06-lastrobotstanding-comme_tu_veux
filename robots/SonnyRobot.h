@@ -11,20 +11,32 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <librobots.h>
 
-class SonnyRobot {
+class SonnyRobot : public Robot {
+    enum Action {
+        NOTDEFINED,
+        BOARD,
+        DAMAGE,
+        MOVE,
+        ATTACK,
+        WAIT
+    };
+
     const std::string ROBOT_NAME = "Sonny";
-    static const unsigned ENERGY_INIT = 10, POWER_INIT = 1;
+
+    size_t mapWidth = 0, mapHeight = 0;
+    unsigned energy = 0, power = 0;
+
+    static Action resolveAction(std::string &action);
+
+    std::vector<std::vector<std::string>> internalMap;
 public:
-    size_t x = 0,y = 0;
-    unsigned energy,power;
-    SonnyRobot(size_t width, size_t height, unsigned energy = ENERGY_INIT, unsigned power = POWER_INIT);
+    void setConfig(size_t width, size_t height, unsigned energy, unsigned power) override;
 
-    void setCoords(size_t xCoord, size_t yCoord);
+    std::string action(std::vector<std::string> updates) override;
 
-    std::string action(std::vector<std::string> updates);
-
-    std::string name();
+    [[nodiscard]] std::string name() const override;
 
 };
 
