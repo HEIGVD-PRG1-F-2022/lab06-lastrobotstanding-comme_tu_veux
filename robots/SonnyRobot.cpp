@@ -14,28 +14,30 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include <iostream>
 #include <librobots.h>
+
 #include "SonnyRobot.h"
+#include "../action.h"
 
 std::string SonnyRobot::action(std::vector<std::string> updates) {
-    for (const std::string& update: updates) {
-        std::vector<std::string> actionParameter = split(update, " ", 1);
+    for (const std::string &update: updates) {
+        std::vector<std::string> actionParameters = split(update, " ", 1);
 
-        std::string action = actionParameter.at(0);
+        std::string action = actionParameters.at(0);
 
-        switch (resolveAction(action)) {
-            case Action::BOARD:
+        switch (Action::resolveAction(action)) {
+            case Action::Name::BOARD:
                 std::cout << "BOARD" << std::endl;
                 break;
-            case Action::DAMAGE:
+            case Action::Name::DAMAGE:
                 std::cout << "DAMAGE" << std::endl;
                 break;
-            case Action::MOVE:
+            case Action::Name::MOVE:
                 std::cout << "MOVE" << std::endl;
                 break;
-            case Action::ATTACK:
+            case Action::Name::ATTACK:
                 std::cout << "ATTACK" << std::endl;
                 break;
-            case Action::WAIT:
+            case Action::Name::WAIT:
                 std::cout << "WAIT" << std::endl;
                 break;
             default:
@@ -55,14 +57,4 @@ void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, uns
 
 std::string SonnyRobot::name() const {
     return this->ROBOT_NAME;
-}
-
-SonnyRobot::Action SonnyRobot::resolveAction(std::string &action) {
-    if (action == "board") return Action::BOARD;
-    if (action == "damage") return Action::DAMAGE;
-    if (action == "move") return Action::MOVE;
-    if (action == "attack") return Action::ATTACK;
-    if (action == "wait") return Action::WAIT;
-
-    return SonnyRobot::NOTDEFINED;
 }
