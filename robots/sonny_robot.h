@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------------
 Project Name    : lab06-lastrobotstanding-comme_tu_veux
-File's Name     : SonnyRobot.h
+File's Name     : sonny_robot.h
 Author          :   Aellen Quentin
                     Atasever Mehmet
                     Salamin Chloé
@@ -12,15 +12,15 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#ifndef ROBOT_SONNYROBOT_H
-#define ROBOT_SONNYROBOT_H
+#ifndef ROBOT_SONNY_ROBOT_H
+#define ROBOT_SONNY_ROBOT_H
 
 #include <cstdlib>
 #include <string>
 #include <vector>
 #include <librobots.h>
 
-class SonnyRobot : public Robot {
+class sonny_robot : public Robot {
 
     const std::string ROBOT_NAME = "Sonny";
 
@@ -38,4 +38,4 @@ public:
 
 };
 
-#endif //ROBOT_SONNYROBOT_H
+#endif //ROBOT_SONNY_ROBOT_H

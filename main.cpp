@@ -17,7 +17,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include <thread>
 #include <iostream>
-#include "robots/SonnyRobot.h"
+#include "robots/sonny_robot.h"
 #include "libdio/display.h"
 #include "game.h"
 #include <librobots.h>
@@ -29,7 +29,7 @@ const int GRID_SIZE = 10 * ROBOT_NUMBER;
 
 // TODO: use action to transmit robot possition
 /*
- * void setupRobotOnGrid(vector<SonnyRobot> &robots) {
+ * void setupRobotOnGrid(vector<sonny_robot> &robots) {
     srand(time(NULL));
 
     bool freeCoords = true;
@@ -42,7 +42,7 @@ const int GRID_SIZE = 10 * ROBOT_NUMBER;
             freeCoords = !any_of(
                     robots.begin(),
                     robots.end(),
-                    [x, y](SonnyRobot &robot) {
+                    [x, y](sonny_robot &robot) {
                         return robot.x == x && robot.y == y;
                     });
 

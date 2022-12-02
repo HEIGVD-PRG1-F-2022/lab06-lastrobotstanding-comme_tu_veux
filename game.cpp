@@ -18,11 +18,11 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include "game.h"
 #include "action.h"
-#include "robots/SonnyRobot.h"
+#include "robots/sonny_robot.h"
 
 void Game::startGame() {
     positionGlobalState.push_back(Point(2, 3));
-    robotsGlobalState.push_back(new SonnyRobot());
+    robotsGlobalState.push_back(new sonny_robot());
 
     while (true) {
         for (size_t index = 0; auto &robot: robotsGlobalState) {

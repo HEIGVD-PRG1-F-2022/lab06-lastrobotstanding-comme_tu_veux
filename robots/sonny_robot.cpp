@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------------
 Project Name    : lab06-lastrobotstanding-comme_tu_veux
-File's Name     : SonnyRobot.cpp
+File's Name     : sonny_robot.cpp
 Author          :   Aellen Quentin
                     Atasever Mehmet
                     Salamin Chloé
@@ -15,10 +15,10 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <iostream>
 #include <librobots.h>
 
-#include "SonnyRobot.h"
+#include "sonny_robot.h"
 #include "../action.h"
 
-std::string SonnyRobot::action(std::vector<std::string> updates) {
+std::string sonny_robot::action(std::vector<std::string> updates) {
     for (const std::string &update: updates) {
         std::vector<std::string> actionParameters = split(update, " ", 1);
 
@@ -48,13 +48,13 @@ std::string SonnyRobot::action(std::vector<std::string> updates) {
 
 }
 
-void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
+void sonny_robot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
     this->mapWidth = width;
     this->mapHeight = height;
     this->energy = energy;
     this->power = power;
 }
 
-std::string SonnyRobot::name() const {
+std::string sonny_robot::name() const {
     return this->ROBOT_NAME;
 }
