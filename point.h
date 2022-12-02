@@ -21,7 +21,7 @@ class Point {
 public:
     size_t x, y;
 
-    Point(int x, int y) : x(x), y(y) {}
+    Point(size_t x, size_t y) : x(x), y(y) {}
 
     explicit operator std::string() const { return std::to_string(x) + "," + std::to_string(y); }
 
