@@ -19,9 +19,8 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <iostream>
 #include "robots/SonnyRobot.h"
 #include "libdio/display.h"
+#include "game.h"
 #include <librobots.h>
-
-#define Map vector<vector<string>>
 
 using namespace std;
 
@@ -59,17 +58,9 @@ const int GRID_SIZE = 10 * ROBOT_NUMBER;
 
 int main() {
 
-    Map grid(GRID_SIZE, vector<string>(GRID_SIZE, " "));
+    Game mainGame;
 
-    vector<Robot*> robots(ROBOT_NUMBER, new SonnyRobot());
-
-    vector<string> updates;
-
-    updates.push_back("attack R                B      R");
-
-    robots.at(0)->action(updates);
-
-    this_thread::sleep_for(10s);
+    mainGame.startGame();
 
     return EXIT_SUCCESS;
 }
