@@ -18,7 +18,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "point.h"
 
 #include <vector>
-#include <librobots.h>
+#include <librobots/Robot.h>
 
 class Game {
     //vectors (energy/power/position/robots)

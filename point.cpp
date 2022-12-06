@@ -3,7 +3,8 @@
 //
 
 #include "point.h"
-#include <librobots.h>
+#include "librobots/Message.h"
+#include <librobots/Robot.h>
 #include <sstream>
 
 using namespace std;

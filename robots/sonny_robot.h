@@ -18,7 +18,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include <librobots.h>
+#include <librobots/Robot.h>
 
 class sonny_robot : public Robot {
 

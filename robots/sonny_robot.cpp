@@ -13,10 +13,11 @@ Compiler        : Mingw-w64 g++ 11.2.0
 */
 
 #include <iostream>
-#include <librobots.h>
+#include <librobots/Robot.h>
 
 #include "sonny_robot.h"
 #include "../action.h"
+#include "librobots/Message.h"
 
 using namespace std;
 

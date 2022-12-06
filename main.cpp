@@ -20,7 +20,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "robots/sonny_robot.h"
 #include "libdio/display.h"
 #include "game.h"
-#include <librobots.h>
+#include <librobots/Robot.h>
 #include <valarray>
 
 using namespace std;
