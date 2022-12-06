@@ -14,7 +14,9 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include "action.h"
 
-Action::Name Action::resolveAction(std::string &action) {
+using namespace std;
+
+Action::Name Action::resolveAction(string &action) {
     if (action == "board") return Action::Name::BOARD;
     if (action == "damage") return Action::Name::DAMAGE;
     if (action == "move") return Action::Name::MOVE;

@@ -18,27 +18,29 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "sonny_robot.h"
 #include "../action.h"
 
-std::string sonny_robot::action(std::vector<std::string> updates) {
-    for (const std::string &update: updates) {
-        std::vector<std::string> actionParameters = split(update, " ", 1);
+using namespace std;
 
-        std::string action = actionParameters.at(0);
+string sonny_robot::action(vector<string> updates) {
+    for (const string &update: updates) {
+        vector<string> actionParameters = split(update, " ", 1);
+
+        string action = actionParameters.at(0);
 
         switch (Action::resolveAction(action)) {
             case Action::Name::BOARD:
-                std::cout << "BOARD" << std::endl;
+                cout << "BOARD" << endl;
                 break;
             case Action::Name::DAMAGE:
-                std::cout << "DAMAGE" << std::endl;
+                cout << "DAMAGE" << endl;
                 break;
             case Action::Name::MOVE:
-                std::cout << "MOVE" << std::endl;
+                cout << "MOVE" << endl;
                 break;
             case Action::Name::ATTACK:
-                std::cout << "ATTACK" << std::endl;
+                cout << "ATTACK" << endl;
                 break;
             case Action::Name::WAIT:
-                std::cout << "WAIT" << std::endl;
+                cout << "WAIT" << endl;
                 break;
             default:
                 break;
@@ -55,6 +57,6 @@ void sonny_robot::setConfig(size_t width, size_t height, unsigned int energy, un
     this->power = power;
 }
 
-std::string sonny_robot::name() const {
+string sonny_robot::name() const {
     return this->ROBOT_NAME;
 }

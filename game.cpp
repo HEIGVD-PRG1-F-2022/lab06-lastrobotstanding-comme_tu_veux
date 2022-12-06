@@ -20,17 +20,19 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "action.h"
 #include "robots/sonny_robot.h"
 
+using namespace std;
+
 void Game::startGame() {
     positionGlobalState.push_back(Point(2, 3));
     robotsGlobalState.push_back(new sonny_robot());
 
     while (true) {
         for (size_t index = 0; auto &robot: robotsGlobalState) {
-            //std::vector<std::string> actionParameters = split(robot.action(this->updates.at(index)), " ", 1);
-            std::vector<std::string> actionParameters = split("attack 6,3", " ", 1);
+            //vector<string> actionParameters = split(robot.action(this->updates.at(index)), " ", 1);
+            vector<string> actionParameters = split("attack 6,3", " ", 1);
 
-            std::string action = actionParameters.at(0);
-            std::string parameters = actionParameters.at(1);
+            string action = actionParameters.at(0);
+            string parameters = actionParameters.at(1);
 
             switch (Action::resolveAction(action)) {
                 case Action::Name::ATTACK:
@@ -47,21 +49,21 @@ void Game::startGame() {
             }
             ++index;
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(1));
     }
 }
 
-std::string Game::attack(Point coords) {
+string Game::attack(Point coords) {
     size_t index = getRobotIndex(coords);
-    std::cout << (std::string)coords << " name: " << robotsGlobalState.at(index)->name() << std::endl;
+    cout << (string)coords << " name: " << robotsGlobalState.at(index)->name() << endl;
     return "Ouille, j'ai mal";
 }
 
-std::iter_difference_t<size_t> Game::getRobotIndex(Point coords) {
-    auto itr = std::find_if(this->positionGlobalState.begin(), this->positionGlobalState.end(),
+iter_difference_t<size_t> Game::getRobotIndex(Point coords) {
+    auto itr = find_if(this->positionGlobalState.begin(), this->positionGlobalState.end(),
                             [&coords](Point p) { return p.x == coords.x && p.y == coords.y; });
 
-    return std::distance(this->positionGlobalState.begin(), itr) - 1;
+    return distance(this->positionGlobalState.begin(), itr) - 1;
 }
 
 bool Game::isRobotAt(Point coords) {

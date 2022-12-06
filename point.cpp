@@ -6,13 +6,15 @@
 #include <librobots.h>
 #include <sstream>
 
-Point Point::fromStrToPoint(std::string coords, std::string sep) {
-    std::vector<std::string> points = split(coords, ",", 1);
+using namespace std;
+
+Point Point::fromStrToPoint(string coords, string sep) {
+    vector<std::string> points = split(coords, ",", 1);
 
     size_t x, y;
-    std::stringstream xCoord(points.at(0));
+    stringstream xCoord(points.at(0));
     xCoord >> x;
-    std::stringstream yCoord(points.at(1));
+    stringstream yCoord(points.at(1));
     yCoord >> y;
 
     return Point(x, y);

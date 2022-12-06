@@ -21,11 +21,12 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "libdio/display.h"
 #include "game.h"
 #include <librobots.h>
+#include <valarray>
 
 using namespace std;
 
 const int ROBOT_NUMBER = 20;
-const int GRID_SIZE = 10 * ROBOT_NUMBER;
+const int GRID_SIZE = 10 * sqrt(ROBOT_NUMBER);
 
 // TODO: use action to transmit robot possition
 /*
