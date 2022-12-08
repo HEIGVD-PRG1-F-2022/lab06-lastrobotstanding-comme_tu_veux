@@ -13,17 +13,16 @@ Compiler        : Mingw-w64 g++ 11.2.0
 */
 
 #include <iostream>
-#include <librobots/Robot.h>
+#include <librobots/Message.h>
 
 #include "sonny_robot.h"
 #include "../action.h"
-#include "librobots/Message.h"
 
 using namespace std;
 
-string sonny_robot::action(vector<string> updates) {
+string SonnyRobot::action(vector<string> updates) {
     for (const string &update: updates) {
-        vector<string> actionParameters = split(update, " ", 1);
+        vector<string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
 
@@ -48,16 +47,15 @@ string sonny_robot::action(vector<string> updates) {
         }
     }
     return "";
-
 }
 
-void sonny_robot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
+void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
     this->mapWidth = width;
     this->mapHeight = height;
     this->energy = energy;
     this->power = power;
 }
 
-string sonny_robot::name() const {
+string SonnyRobot::name() const {
     return this->ROBOT_NAME;
 }

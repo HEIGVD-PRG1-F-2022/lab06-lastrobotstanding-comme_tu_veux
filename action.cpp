@@ -16,12 +16,21 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 using namespace std;
 
-Action::Name Action::resolveAction(string &action) {
-    if (action == "board") return Action::Name::BOARD;
-    if (action == "damage") return Action::Name::DAMAGE;
-    if (action == "move") return Action::Name::MOVE;
-    if (action == "attack") return Action::Name::ATTACK;
-    if (action == "wait") return Action::Name::WAIT;
+Action::Name Action::resolveAction(std::string &action) {
+    if (action == BOARD_STRING)
+        return Action::Name::BOARD;
+    if (action == DAMAGE_STRING)
+        return Action::Name::DAMAGE;
+    if (action == MOVE_STRING)
+        return Action::Name::MOVE;
+    if (action == ATTACK_STRING)
+        return Action::Name::ATTACK;
+    if (action == WAIT_STRING)
+        return Action::Name::WAIT;
 
     return Action::Name::NOTDEFINED;
+}
+
+std::string Action::generateDamage(Point coords, unsigned int energy) {
+    return DAMAGE_STRING + " " + (std::string) coords + "," + std::to_string(energy);
 }

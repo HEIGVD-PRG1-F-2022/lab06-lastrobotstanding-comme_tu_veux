@@ -11,32 +11,32 @@ Remarque(s)     :
 Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
-#include <algorithm>
-#include <iostream>
 #include <thread>
 #include <chrono>
+#include <librobots/Message.h>
 
 #include "game.h"
 #include "action.h"
 #include "robots/sonny_robot.h"
+#include "robot_state.h"
 
 using namespace std;
 
 void Game::startGame() {
-    positionGlobalState.push_back(Point(2, 3));
-    robotsGlobalState.push_back(new sonny_robot());
+    robotsState.push_back(RobotState(new SonnyRobot(), Point(0, 0), 5, 10, 1));
+    robotsState.push_back(RobotState(new SonnyRobot(), Point(6, 3), 5, 10, 1));
 
     while (true) {
-        for (size_t index = 0; auto &robot: robotsGlobalState) {
-            //vector<string> actionParameters = split(robot.action(this->updates.at(index)), " ", 1);
-            vector<string> actionParameters = split("attack 6,3", " ", 1);
+        for (size_t index = 0; auto &robotState: robotsState) {
+            // vector<string> actionParameters = split(robotState.action(this->updates.at(index)), " ", 1);
+            vector<string> actionParameters = split("attack 6,3", " ", 2);
 
             string action = actionParameters.at(0);
             string parameters = actionParameters.at(1);
 
             switch (Action::resolveAction(action)) {
                 case Action::Name::ATTACK:
-                    attack(Point::fromStrToPoint(parameters));
+                    attack(Point::fromStrToPoint(parameters), robotState);
                     break;
                 case Action::Name::DAMAGE:
                     break;
@@ -53,19 +53,32 @@ void Game::startGame() {
     }
 }
 
-string Game::attack(Point coords) {
-    size_t index = getRobotIndex(coords);
-    cout << (string)coords << " name: " << robotsGlobalState.at(index)->name() << endl;
-    return "Ouille, j'ai mal";
+string Game::damage(const Point coords, RobotState &attacker) {
+    string action;
+
+    // Search robot to attack iterator
+    auto robot = find_if(this->robotsState.begin(), this->robotsState.end(),
+                         [&coords](RobotState r) {
+                             return r.getCoords().x == coords.x && r.getCoords().y == coords.y;
+                         });
+
+    if (robot != this->robotsState.end()) {
+        // Add the information that he took damage from attacker
+        action = Action::generateDamage(attacker.getCoords(), attacker.getPower());
+        robot->addUpdate(action);
+    }
+
+    return action;
 }
 
-iter_difference_t<size_t> Game::getRobotIndex(Point coords) {
-    auto itr = find_if(this->positionGlobalState.begin(), this->positionGlobalState.end(),
-                            [&coords](Point p) { return p.x == coords.x && p.y == coords.y; });
-
-    return distance(this->positionGlobalState.begin(), itr) - 1;
+string Game::attack(const Point coords, RobotState &attacker) {
+    return Game::damage(coords, attacker);
 }
 
 bool Game::isRobotAt(Point coords) {
-    return false;
+    auto it = find_if_not(robotsState.begin(), robotsState.end(),
+                          [&coords](RobotState robotState) {
+                              return robotState == coords;
+                          });
+    return it != robotsState.end();
 }

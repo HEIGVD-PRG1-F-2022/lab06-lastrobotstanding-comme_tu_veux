@@ -15,8 +15,17 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #define ROBOT_ACTION_H
 
 #include <string>
+#include "point.h"
+
+const std::string BOARD_STRING = "board";
+const std::string DAMAGE_STRING = "damage";
+const std::string MOVE_STRING = "move";
+const std::string ATTACK_STRING = "attack";
+const std::string WAIT_STRING = "wait";
 
 class Action {
+
+
 public:
     enum Name {
         NOTDEFINED,
@@ -28,6 +37,8 @@ public:
     };
 
     static Name resolveAction(std::string &action);
+
+    static std::string generateDamage(Point coords, unsigned int energy);
 };
 
 #endif //ROBOT_ACTION_H

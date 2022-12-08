@@ -20,7 +20,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include <librobots/Robot.h>
 
-class sonny_robot : public Robot {
+class SonnyRobot : public Robot {
 
     const std::string ROBOT_NAME = "Sonny";
 

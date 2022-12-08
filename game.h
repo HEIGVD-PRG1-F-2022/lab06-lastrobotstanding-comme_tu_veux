@@ -15,31 +15,21 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #ifndef ROBOT_GAME_H
 #define ROBOT_GAME_H
 
-#include "point.h"
-
 #include <vector>
 #include <librobots/Robot.h>
+#include "robot_state.h"
+#include "point.h"
 
 class Game {
-    //vectors (energy/power/position/robots)
-    //vector board (25,'-')
-    //  while true
-    //      for each (auto& robots)
-    //      1. read answer from robots
-    //      2. update board (actions)
-    //      3. appel action function (ask robots actions)
-
-    std::vector<unsigned> energyGlobalState;
-    std::vector<unsigned> powerGlobalState;
-    std::vector<Point> positionGlobalState;
-    std::vector<Robot*> robotsGlobalState;
-
-    std::vector<std::vector<std::string>> updates;
+    std::vector<RobotState> robotsState;
 public:
     void startGame();
-    std::string attack(Point coords);
+
+    std::string attack(const Point coords, RobotState &attacker);
+
+    std::string damage(const Point coords, RobotState &attacker);
+
     bool isRobotAt(Point coords);
-    std::iter_difference_t<size_t> getRobotIndex(Point coords);
 };
 
 

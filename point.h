@@ -21,11 +21,15 @@ class Point {
 public:
     size_t x, y;
 
+    Point();
+
     Point(size_t x, size_t y) : x(x), y(y) {}
 
-    explicit operator std::string() const { return std::to_string(x) + "," + std::to_string(y); }
+    explicit operator std::string() const;
 
-    static Point fromStrToPoint(std::string coords, std::string sep = ",");
+    static Point fromStrToPoint(const std::string& coords, const std::string& sep = ",");
+
+    bool operator == (Point coords) const;
 };
 
 #endif //ROBOT_POINT_H
