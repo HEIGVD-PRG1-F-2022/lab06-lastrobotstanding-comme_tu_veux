@@ -13,12 +13,12 @@ Compiler        : Mingw-w64 g++ 11.2.0
 */
 #include <thread>
 #include <chrono>
-#include <librobots/Message.h>
+#include "librobots/Message.h"
 
-#include "game.h"
-#include "action.h"
-#include "robots/sonny_robot.h"
-#include "robot_state.h"
+#include "../include/game.h"
+#include "../include/action.h"
+#include "../robots/sonny_robot.h"
+#include "../include/robot_state.h"
 
 using namespace std;
 

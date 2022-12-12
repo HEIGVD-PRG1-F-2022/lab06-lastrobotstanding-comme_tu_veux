@@ -16,7 +16,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <librobots/Message.h>
 
 #include "sonny_robot.h"
-#include "../action.h"
+#include "../include/action.h"
 
 using namespace std;
 

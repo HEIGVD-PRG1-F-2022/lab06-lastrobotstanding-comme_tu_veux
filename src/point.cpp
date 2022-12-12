@@ -12,7 +12,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#include "point.h"
+#include "../include/point.h"
 #include "librobots/Message.h"
 #include <vector>
 #include <sstream>

@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------------
 Project Name    : lab06-lastrobotstanding-comme_tu_veux
-File's Name     : game.h
+File's Name     : main.cpp
 Author          :   Aellen Quentin
                     Atasever Mehmet
                     Salamin Chloé
@@ -12,25 +12,15 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#ifndef ROBOT_GAME_H
-#define ROBOT_GAME_H
+#include "../include/game.h"
 
-#include <vector>
-#include <librobots/Robot.h>
-#include "robot_state.h"
-#include "point.h"
+using namespace std;
 
-class Game {
-    std::vector<RobotState> robotsState;
-public:
-    void startGame();
+int main() {
 
-    std::string attack(const Point coords, RobotState &attacker);
+    Game mainGame;
 
-    std::string damage(const Point coords, RobotState &attacker);
+    mainGame.startGame();
 
-    bool isRobotAt(Point coords);
-};
-
-
-#endif //ROBOT_GAME_H
+    return EXIT_SUCCESS;
+}

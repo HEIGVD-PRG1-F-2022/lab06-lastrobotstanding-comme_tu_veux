@@ -12,7 +12,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#include "robot_state.h"
+#include "../include/robot_state.h"
 
 RobotState::RobotState(Robot *robot, Point coords, size_t fieldOfView, unsigned int energy, unsigned int power) {
     this->robot = robot;
