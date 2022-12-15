@@ -18,7 +18,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include <string>
 #include "librobots/Robot.h"
-#include "point.h"
+#include "../robots/point.h"
 
 class RobotState {
     unsigned energy, power;
