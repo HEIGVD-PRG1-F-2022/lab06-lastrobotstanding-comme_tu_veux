@@ -12,7 +12,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#include "../include/action.h"
+#include "action.h"
 
 using namespace std;
 

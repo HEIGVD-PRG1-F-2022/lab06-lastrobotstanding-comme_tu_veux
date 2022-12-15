@@ -18,18 +18,23 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <string>
 
 class Point {
+    friend Point operator+(Point &lhs, const Point &rhs);
 public:
-    size_t x, y;
+    int x, y;
 
     Point();
 
-    Point(size_t x, size_t y) : x(x), y(y) {}
+    Point(int x, int y) : x(x), y(y) {}
 
     explicit operator std::string() const;
 
     static Point fromStrToPoint(const std::string& coords, const std::string& sep = ",");
 
     bool operator == (Point coords) const;
+
+    Point& operator += (const Point& rhs);
+
+    static Point& wrap(Point &coords, int min, int max);
 };
 
 #endif //ROBOT_POINT_H

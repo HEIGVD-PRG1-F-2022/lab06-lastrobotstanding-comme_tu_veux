@@ -28,14 +28,14 @@ bool RobotState::operator==(Point coords) const {
     return this->coords == coords;
 }
 
-Point RobotState::getCoords() {
-    return coords;
-}
-
 unsigned RobotState::getPower() {
     return power;
 }
 
 void RobotState::addUpdate(const std::string &update) {
     this->updates.push_back(update);
+}
+
+std::vector<std::string> RobotState::getUpdates() {
+    return updates;
 }

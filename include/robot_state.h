@@ -21,15 +21,15 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include "point.h"
 
 class RobotState {
-    Robot *robot;
-    Point coords;
     unsigned energy, power;
 
     std::vector<std::string> updates;
 public:
+    Point coords;
+    Robot *robot;
     RobotState(Robot *robot, Point coords, size_t fieldOfView, unsigned energy, unsigned power);
 
-    Point getCoords();
+    std::vector<std::string> getUpdates();
 
     unsigned getPower();
 

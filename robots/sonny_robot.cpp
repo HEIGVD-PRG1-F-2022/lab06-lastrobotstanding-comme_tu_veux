@@ -16,22 +16,30 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <librobots/Message.h>
 
 #include "sonny_robot.h"
-#include "../include/action.h"
+#include "action.h"
 
 using namespace std;
 
 string SonnyRobot::action(vector<string> updates) {
     for (const string &update: updates) {
+        if (update.empty()) {
+            continue;
+        }
+
         vector<string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
+        string parameters;
+        if (actionParameters.size() == 2) {
+            parameters = actionParameters.at(1);
+        }
 
         switch (Action::resolveAction(action)) {
             case Action::Name::BOARD:
                 cout << "BOARD" << endl;
                 break;
             case Action::Name::DAMAGE:
-                cout << "DAMAGE" << endl;
+                cout << "DAMAGE" << parameters << endl;
                 break;
             case Action::Name::MOVE:
                 cout << "MOVE" << endl;
@@ -45,8 +53,11 @@ string SonnyRobot::action(vector<string> updates) {
             default:
                 break;
         }
+        updates.erase(find(updates.begin(), updates.end(), update));
     }
-    return "";
+
+
+    return "move -2,-2";
 }
 
 void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {

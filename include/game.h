@@ -29,7 +29,10 @@ public:
 
     std::string damage(const Point coords, RobotState &attacker);
 
+    std::string move(const Point coords, RobotState &attacker);
+
     bool isRobotAt(Point coords);
+
 };
 
 
