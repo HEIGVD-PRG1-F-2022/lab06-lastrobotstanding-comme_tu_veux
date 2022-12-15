@@ -60,6 +60,44 @@ string SonnyRobot::action(vector<string> updates) {
     return "move -2,-2";
 }
 
+    /*
+     * 	Cherche Bonus : si robot plus proche de bonus regarde si il peut attack sinon fuite
+     * 	attack robot seulement si energy suffisante
+     * 	move diagonale
+     */
+
+/*    int robot,energy, nbrRound,bonus, posRobot, posBonus, posSonny;
+ *      string action = " ";
+
+    if(bonus){
+        if (!robot){
+            cout << "go to Bonus";
+        } else{
+            if (posBonus - posSonny < posBonus - posRobot){
+                cout << "go to Bonus";
+            } else if(energy > 5 + nbrRound){
+                cout << "ATTACK" << endl;
+            }else{
+                cout << "MOVE" << endl;
+            }
+        }
+
+   if (robot){
+       if(energy > 5 + nbrRound){
+           cout << "ATTACK" << endl;
+       }else{
+           cout << "MOVE" << endl;
+       }
+   }
+
+   else{
+            action = "move -2,-2";
+    }
+
+    return action;
+}*/
+
+
 void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
     this->mapWidth = width;
     this->mapHeight = height;
