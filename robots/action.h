@@ -31,7 +31,8 @@ public:
         DAMAGE,
         MOVE,
         ATTACK,
-        WAIT
+        WAIT,
+        BONUS
     };
 
     static Name resolveAction(std::string &action);

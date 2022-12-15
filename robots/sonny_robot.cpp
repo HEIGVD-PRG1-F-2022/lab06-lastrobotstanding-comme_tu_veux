@@ -50,6 +50,9 @@ string SonnyRobot::action(vector<string> updates) {
             case Action::Name::WAIT:
                 cout << "WAIT" << endl;
                 break;
+            case Action::Name::BONUS:
+                cout << "BONUS" << endl;
+                break;
             default:
                 break;
         }
@@ -57,7 +60,7 @@ string SonnyRobot::action(vector<string> updates) {
     }
 
 
-    return "move -2,-2";
+    return "move -1,-1";
 }
 
     /*
@@ -66,10 +69,9 @@ string SonnyRobot::action(vector<string> updates) {
      * 	move diagonale
      */
 
-/*    int robot,energy, nbrRound,bonus, posRobot, posBonus, posSonny;
- *      string action = " ";
+/*  string action = " ";
 
-    if(bonus){
+    if(BONUS){
         if (!robot){
             cout << "go to Bonus";
         } else{
