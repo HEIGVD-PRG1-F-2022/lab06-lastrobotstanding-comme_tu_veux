@@ -38,6 +38,7 @@ void Game::startGame() {
     Display::init();
     time_t start, end;
     double time_taken;
+    unsigned short counter = 0;
     while (true) {
         end = clock();
         for (size_t y = 0; y < grid.size(); ++y) {
@@ -82,6 +83,7 @@ void Game::startGame() {
             ++index;
         }
         //this_thread::sleep_for(chrono::seconds(1));
+        ++counter;
     }
 }
 
@@ -144,4 +146,12 @@ std::string Game::move(const Point direction, RobotState &robot) {
     Point::wrap(robot.coords += newDirection, 0, SIZE_GRID);
 
     return "move " + (string) newDirection;
+}
+
+Point Game::getFreeRandomPoint(const vector<RobotState> &robotState, const vector<Bonus> &boni) {
+    srand((unsigned) time(NULL));
+    int random = rand();
+
+    while (an)
+    return Point();
 }
