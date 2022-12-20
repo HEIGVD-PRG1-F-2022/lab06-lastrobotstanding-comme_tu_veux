@@ -122,15 +122,10 @@ Point SonnyRobot::targetToLock() {
 
     for (size_t y = 0; y < internalMap.size(); ++y)  {
         for (size_t x = 0; x < internalMap.at(y).size(); ++x){
-            if (internalMap.at(y).at(x) == "B") {
-                Point bonus(x, y);
-                if (sonny.distance(bonus) < sonny.distance(shortestPoint)) {
-                    shortestPoint = bonus;
-                } else if (internalMap.at(y).at(x) == "R") {
-                    Point robot(x, y);
-                    if (sonny.distance(robot) < sonny.distance(shortestPoint)) {
-                        shortestPoint = robot;
-                    }
+            if (!internalMap.at(y).at(x).empty()) {
+                Point current(x, y);
+                if(sonny.distance(current) < sonny.distance(shortestPoint)) {
+                    shortestPoint = current;
                 }
             }
         }
