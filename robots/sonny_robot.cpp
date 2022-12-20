@@ -59,6 +59,9 @@ string SonnyRobot::action(vector<string> updates) {
         updates.erase(find(updates.begin(), updates.end(), update));
     }
 
+    target = targetToLock();
+
+
 
     return "attack 0,-2";
 }
@@ -109,4 +112,28 @@ void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, uns
 
 string SonnyRobot::name() const {
     return this->ROBOT_NAME;
+}
+
+Point SonnyRobot::targetToLock() {
+    int xCenter = (mapWidth - 1)/2;
+    int yCenter = (mapHeight -1)/2;
+    Point sonny(xCenter,yCenter);
+    Point shortestPoint(0,0);
+
+    for (size_t y = 0; y < internalMap.size(); ++y)  {
+        for (size_t x = 0; x < internalMap.at(y).size(); ++x){
+            if (internalMap.at(y).at(x) == "B") {
+                Point bonus(x, y);
+                if (sonny.distance(bonus) < sonny.distance(shortestPoint)) {
+                    shortestPoint = bonus;
+                } else if (internalMap.at(y).at(x) == "R") {
+                    Point robot(x, y);
+                    if (sonny.distance(robot) < sonny.distance(shortestPoint)) {
+                        shortestPoint = robot;
+                    }
+                }
+            }
+        }
+    }
+    return Point();
 }

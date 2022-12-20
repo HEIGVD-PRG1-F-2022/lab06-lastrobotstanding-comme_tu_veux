@@ -19,6 +19,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <string>
 #include <vector>
 #include <librobots/Robot.h>
+#include "./point.h"
 
 class SonnyRobot : public Robot {
 
@@ -27,7 +28,12 @@ class SonnyRobot : public Robot {
     size_t mapWidth = 0, mapHeight = 0;
     unsigned energy = 0, power = 0;
 
+    Point target;
+    Point targetToLock();
+
     std::vector<std::vector<std::string>> internalMap;
+
+
 
 public:
     void setConfig(size_t width, size_t height, unsigned energy, unsigned power) override;
