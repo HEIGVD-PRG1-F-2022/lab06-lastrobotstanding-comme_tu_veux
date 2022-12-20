@@ -18,12 +18,14 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include "librobots/Robot.h"
 #include "robot_state.h"
-#include "point.h"
+#include "../robots/point.h"
 #include "bonus.h"
 
-class Game {
+class Game
+{
     std::vector<RobotState> robotsState;
     std::vector<Bonus> boni;
+
 public:
     void startGame();
 
@@ -38,8 +40,6 @@ public:
     Bonus generateBonus(const Point coords);
 
     bool isRobotAt(Point coords);
-
 };
 
-
-#endif //ROBOT_GAME_H
+#endif // ROBOT_GAME_H

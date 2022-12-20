@@ -15,7 +15,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #define ROBOT_ACTION_H
 
 #include <string>
-#include "../include/point.h"
+#include "point.h"
 
 const std::string BOARD_STRING = "board";
 const std::string DAMAGE_STRING = "damage";
@@ -31,7 +31,8 @@ public:
         DAMAGE,
         MOVE,
         ATTACK,
-        WAIT
+        WAIT,
+        BONUS
     };
 
     static Name resolveAction(std::string &action);
