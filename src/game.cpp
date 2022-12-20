@@ -28,21 +28,20 @@ const size_t NB_ROBOT = 2;
 const size_t SIZE_GRID = NB_ROBOT * 10;
 
 void Game::startGame() {
-    robotsState.push_back(RobotState(new SonnyRobot(), Point(0, 0), 5, 10, 1));
+    robotsState.push_back(RobotState(new SonnyRobot(), Point(6, 1), 5, 10, 1));
     robotsState.push_back(RobotState(new SonnyRobot(), Point(6, 3), 5, 10, 1));
 
-    vector<vector<string>> grid(SIZE_GRID, vector<string>(SIZE_GRID, " "));
+    vector<vector<string>> grid(SIZE_GRID, vector<string>(SIZE_GRID));
     Display::init();
     time_t start, end;
     double time_taken;
     unsigned short counter = 0;
+    bool attackFlag = false;
 
     while (true) {
-
         // Generate bonus every 20 turns
-        if (counter == 20) {
+        if (!(counter % 20)) {
             boni.push_back(generateBonus(getFreeRandomPoint(grid)));
-            counter = 0;
         }
 
         end = clock();
@@ -53,7 +52,7 @@ void Game::startGame() {
                 grid.at(y).at(x) = "";
 
                 if (any_of(robotsState.begin(), robotsState.end(),
-                           [&x, &y](RobotState r) { return r.coords == Point((int) x, (int) y); })) {
+                           [&x, &y](RobotState r) { return r.getCoords() == Point((int) x, (int) y) && r.getAliveState();})) {
                     grid.at(y).at(x) = "R";
                 }
 
@@ -67,8 +66,8 @@ void Game::startGame() {
         // Calculate time taken by the program between each turn, debug only
         time_taken = double(end - start) / double(CLOCKS_PER_SEC);
         Display::saveCursorPosition();
-        cout << "Time taken by program is : " << fixed
-             << time_taken << setprecision(5) << " sec" << endl;
+        cout << "Time between frames: " << fixed
+             << time_taken << setprecision(5) << " sec, turn: " << counter << "   " << endl;
         Display::restoreCursorPosition();
         start = clock();
 
@@ -87,6 +86,7 @@ void Game::startGame() {
 
             switch (Action::resolveAction(action)) {
                 case Action::Name::ATTACK:
+                    attackFlag = true;
                     attack(Point::fromStrToPoint(parameters), robotState);
                     break;
                 case Action::Name::MOVE:
@@ -99,6 +99,17 @@ void Game::startGame() {
             }
             ++index;
         }
+
+        // Check if there was an attack in the last 100 turns if not end the game
+        if (counter > 100) {
+            if (!attackFlag) {
+                return;
+            } else {
+                attackFlag = false;
+            }
+            counter = 10;
+        }
+
         //this_thread::sleep_for(chrono::seconds(1));
         ++counter;
     }
@@ -107,15 +118,30 @@ void Game::startGame() {
 string Game::damage(const Point coords, RobotState &attacker) {
     string action;
 
+    Point attackerCoords = attacker.getCoords();
+
+    Point delta = attackerCoords + coords;
+
     // Search robot to attack iterator
     auto robot = find_if(this->robotsState.begin(), this->robotsState.end(),
-                         [&coords](RobotState r) {
-                             return r.coords.x == coords.x && r.coords.y == coords.y;
+                         [&delta](RobotState r) {
+                             return r.getCoords() == delta;
                          });
 
     if (robot != this->robotsState.end()) {
         // Add the information that he took damage from attacker
-        action = Action::generateDamage(attacker.coords, attacker.getPower());
+
+        int dist = attacker.getCoords().distance(robot->getCoords());
+
+        unsigned attackPower = dist < 2 ? attacker.getPower() * 2 : dist < 3 ? attacker.getPower() : 0;
+
+        action = Action::generateDamage(attacker.getCoords(),attackPower);
+
+        robot->setEnergy(robot->getEnergy() - attackPower);
+
+        if(robot->getEnergy() <= 0){
+            robot->die();
+        }
         robot->addUpdate(action);
     }
 
@@ -142,22 +168,22 @@ std::string Game::move(const Point direction, RobotState &robot) {
     // Search robot to attack iterator
     auto robotOnMap = find_if(this->robotsState.begin(), this->robotsState.end(),
                               [&robot](RobotState r) {
-                                  return r.coords.x == robot.coords.x &&
-                                         r.coords.y == robot.coords.y;
+                                  return r.getCoords() == robot.getCoords();
                               });
     // TODO: check if there is multiple robot on the same position
-    Point::wrap(robot.coords += newDirection, 0, SIZE_GRID);
+    Point::wrap(robot.getCoords() += newDirection, 0, SIZE_GRID);
 
     return "move " + (string) newDirection;
 }
 
 Point Game::getFreeRandomPoint(const vector<vector<string>> &grid) {
     default_random_engine generator;
-    uniform_int_distribution<int> distribution(0, (int)grid.size()-1);
+    uniform_int_distribution<int> distribution(0, (int) grid.size() - 1);
 
+    // Will search for a free point on the grid until it finds one
     while (true) {
         Point point(distribution(generator), distribution(generator));
-        if (grid.at((size_t) point.y).at((size_t) point.x) == "") {
+        if (grid.at((size_t) point.y).at((size_t) point.x).empty()) {
             return point;
         }
     }

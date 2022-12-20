@@ -32,6 +32,14 @@ unsigned RobotState::getPower() {
     return power;
 }
 
+Point RobotState::getCoords() {
+    return coords;
+}
+
+void RobotState::setCoords(Point coords) {
+    this->coords = coords;
+}
+
 void RobotState::addUpdate(const std::string &update) {
     this->updates.push_back(update);
 }
@@ -39,3 +47,21 @@ void RobotState::addUpdate(const std::string &update) {
 std::vector<std::string> RobotState::getUpdates() {
     return updates;
 }
+
+unsigned RobotState::getEnergy() {
+    return this->energy;
+}
+
+void RobotState::setEnergy(unsigned int energy) {
+    this->energy = energy;
+}
+
+bool RobotState::getAliveState() {
+    return this->isAlive;
+}
+
+void RobotState::die() {
+    this->isAlive = false;
+}
+
+

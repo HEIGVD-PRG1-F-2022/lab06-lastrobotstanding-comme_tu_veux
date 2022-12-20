@@ -18,7 +18,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <string>
 
 class Point {
-    friend Point operator+(Point &lhs, const Point &rhs);
+    friend Point operator+(Point lhs, const Point &rhs);
 public:
     int x, y;
 
@@ -35,6 +35,8 @@ public:
     Point& operator += (const Point& rhs);
 
     static Point& wrap(Point &coords, int min, int max);
+
+    int distance(Point coords) const;
 };
 
 #endif //ROBOT_POINT_H

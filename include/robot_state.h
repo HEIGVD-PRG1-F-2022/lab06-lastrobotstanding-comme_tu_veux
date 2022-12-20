@@ -22,16 +22,33 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 class RobotState {
     unsigned energy, power;
+    Point coords;
+
+    bool isAlive = true;
 
     std::vector<std::string> updates;
 public:
-    Point coords;
+
     Robot *robot;
     RobotState(Robot *robot, Point coords, size_t fieldOfView, unsigned energy, unsigned power);
 
     std::vector<std::string> getUpdates();
 
     unsigned getPower();
+
+    void setPower(unsigned power);
+
+    unsigned getEnergy();
+
+    void setEnergy(unsigned energy);
+
+    Point getCoords();
+
+    bool getAliveState();
+
+    void die();
+
+    void setCoords(Point coords);
 
     void addUpdate(const std::string &update);
 

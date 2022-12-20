@@ -29,15 +29,15 @@ class Game
 public:
     void startGame();
 
-    std::string attack(const Point coords, RobotState &attacker);
+    std::string attack(Point coords, RobotState &attacker);
 
-    std::string damage(const Point coords, RobotState &attacker);
+    std::string damage(Point coords, RobotState &attacker);
 
-    std::string move(const Point coords, RobotState &robot);
+    std::string move(Point coords, RobotState &robot);
 
-    Point getFreeRandomPoint(const std::vector<std::vector<std::string>> &grid);
+    static Point getFreeRandomPoint(const std::vector<std::vector<std::string>> &grid);
 
-    Bonus generateBonus(const Point coords);
+    static Bonus generateBonus(Point coords);
 
     bool isRobotAt(Point coords);
 };
