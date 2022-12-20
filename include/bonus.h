@@ -15,7 +15,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #ifndef ROBOT_BONUS_H
 #define ROBOT_BONUS_H
 
-#include "point.h"
+#include "../robots/point.h"
 
 class Bonus {
 public:
@@ -23,7 +23,7 @@ public:
         Energy,
         PowerUp
     };
-    Bonus(Type bonusType, unsigned amount) : amount(amount), bonusType(bonusType) {};
+    Bonus(Point coords, Type bonusType, unsigned amount) : coords(coords), amount(amount), bonusType(bonusType) {};
 
     unsigned getAmount();
 

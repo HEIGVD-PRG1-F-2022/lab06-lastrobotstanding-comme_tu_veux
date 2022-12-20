@@ -35,7 +35,7 @@ public:
 
     std::string move(const Point coords, RobotState &robot);
 
-    Point getFreeRandomPoint(const std::vector<RobotState> &robotState, const std::vector<Bonus> &boni);
+    Point getFreeRandomPoint(const std::vector<std::vector<std::string>> &grid);
 
     Bonus generateBonus(const Point coords);
 
