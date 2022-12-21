@@ -22,10 +22,6 @@ using namespace std;
 
 string SonnyRobot::action(vector <string> updates) {
     for (const string &update: updates) {
-        if(update.empty()) {
-            continue;
-        }
-
         vector <string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
@@ -44,7 +40,6 @@ string SonnyRobot::action(vector <string> updates) {
                 energy -= (unsigned)stoi(damageInfo.at(2));
                 break;
         }
-        updates.erase(find(updates.begin(), updates.end(), update));
     }
 
     target = targetToLock();
