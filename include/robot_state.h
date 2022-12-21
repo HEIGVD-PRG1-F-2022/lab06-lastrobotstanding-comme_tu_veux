@@ -17,20 +17,21 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include <vector>
 #include <string>
+
 #include "librobots/Robot.h"
 #include "../robots/point.h"
+#include "state.h"
 
-class RobotState {
+class RobotState : public State {
     unsigned energy, power;
-    Point coords;
 
     bool isAlive = true;
 
     std::vector<std::string> updates;
 public:
 
-    Robot *robot;
-    RobotState(Robot *robot, Point coords, size_t fieldOfView, unsigned energy, unsigned power);
+    class Robot *robot;
+    RobotState(size_t id, class Robot *robot, Point coords, size_t fieldOfView, unsigned int energy, unsigned int power);
 
     std::vector<std::string> getUpdates();
 
@@ -42,13 +43,10 @@ public:
 
     void setEnergy(unsigned energy);
 
-    Point getCoords();
-
     bool getAliveState();
 
     void die();
 
-    void setCoords(Point coords);
 
     void addUpdate(const std::string &update);
 

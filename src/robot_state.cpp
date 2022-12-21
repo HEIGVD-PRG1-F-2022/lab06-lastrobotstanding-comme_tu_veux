@@ -14,7 +14,13 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include "../include/robot_state.h"
 
-RobotState::RobotState(Robot *robot, Point coords, size_t fieldOfView, unsigned int energy, unsigned int power) {
+RobotState::RobotState(size_t id,
+                       class Robot *robot,
+                       Point coords,
+                       size_t fieldOfView,
+                       unsigned int energy,
+                       unsigned int power) : State(id) {
+    this->type = State::Type::Robot;
     this->robot = robot;
     this->robot->setConfig(fieldOfView, fieldOfView, energy, power);
 
@@ -30,14 +36,6 @@ bool RobotState::operator==(Point coords) const {
 
 unsigned RobotState::getPower() {
     return power;
-}
-
-Point RobotState::getCoords() {
-    return coords;
-}
-
-void RobotState::setCoords(Point coords) {
-    this->coords = coords;
 }
 
 void RobotState::addUpdate(const std::string &update) {

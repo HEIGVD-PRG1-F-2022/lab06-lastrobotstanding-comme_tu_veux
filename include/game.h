@@ -16,20 +16,64 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #define ROBOT_GAME_H
 
 #include <vector>
+#include <chrono>
+#include <random>
+
 #include "librobots/Robot.h"
 #include "robot_state.h"
 #include "../robots/point.h"
-#include "bonus.h"
+#include "bonus_state.h"
+#include "state.h"
 
-class Game
-{
-    std::vector<RobotState> robotsState;
-    std::vector<Bonus> boni;
+class Game {
+    static const size_t NB_ROBOT = 2;
+    static const size_t SIZE_GRID = NB_ROBOT * 10;
+
+    const unsigned DEFAULT_ENERGY = 10;
+    const unsigned DEFAULT_POWER = 1;
+    const unsigned DEFAULT_FIELDOFVIEW = 5;
+
+    typedef std::vector<std::vector<std::string>> Map;
+
+    std::random_device r;
+    std::default_random_engine randomGenerator;
+
+    Map grid;
+    std::vector<State> entitiesState;
+
+    size_t roundCount = 0;
 
 public:
+    Game();
+
+    void setupGame();
+
     void startGame();
 
-    void generateRobots(const std::vector<std::vector<std::string>> &grid, std::vector<RobotState> &robotsState, unsigned nbRobots);
+    /**
+     * Generate a random free Point, it check if position is not already take by another entity
+     * @return Point
+     */
+    Point getFreeRandomPoint();
+
+    /**
+     * Generate a new unique id to use for an entity
+     * @return
+     */
+    size_t getNewId();
+
+
+    /**
+     * Generate and add robot entities into the state manager
+     * @param nbRobots
+     */
+    void generateRobots(unsigned nbRobots);
+
+    /**
+     * Generate and add bonus entities into the state manager
+     * @param nbBoni
+     */
+    void generateBoni(unsigned nbBoni);
 
     std::string attack(Point coords, RobotState &attacker);
 
@@ -37,9 +81,9 @@ public:
 
     std::string move(Point coords, RobotState &robot);
 
-    static Point getFreeRandomPoint(const std::vector<std::vector<std::string>> &grid);
 
-    static Bonus generateBonus(Point coords);
+
+
 
     bool isRobotAt(Point coords);
 };

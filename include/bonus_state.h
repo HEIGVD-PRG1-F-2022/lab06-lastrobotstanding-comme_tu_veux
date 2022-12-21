@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------------
 Project Name    : lab06-lastrobotstanding-comme_tu_veux
-File's Name     : bonus.cpp
+File's Name     : bonus_state.h
 Author          :   Aellen Quentin
                     Atasever Mehmet
                     Salamin Chloé
@@ -12,12 +12,26 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#include "../include/bonus.h"
+#ifndef ROBOT_BONUS_STATE_H
+#define ROBOT_BONUS_STATE_H
 
-unsigned Bonus::getAmount() {
-    return this->amount;
-}
+#include "../robots/point.h"
+#include "state.h"
 
-Point Bonus::getCoords() {
-    return this->coords;
-}
+class BonusState : public State {
+public:
+    enum class Type {
+        Energy,
+        PowerUp
+    };
+
+    BonusState(size_t id, Point coords, Type bonusType, unsigned amount);
+
+    unsigned getAmount();
+
+private:
+    unsigned amount;
+    BonusState::Type bonusType;
+};
+
+#endif //ROBOT_BONUS_STATE_H
