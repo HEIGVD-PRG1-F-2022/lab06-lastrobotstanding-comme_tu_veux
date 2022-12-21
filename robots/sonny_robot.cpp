@@ -100,9 +100,8 @@ string SonnyRobot::name() const {
 }
 
 Point SonnyRobot::targetToLock() {
-    int xCenter = (mapWidth - 1) / 2;
-    int yCenter = (mapHeight - 1) / 2;
-    Point sonny(xCenter, yCenter);
+
+    Point sonny = getCenterMap();
     Point shortestPoint(0, 0);
 
     for (size_t y = 0; y < internalMap.size(); ++y) {
