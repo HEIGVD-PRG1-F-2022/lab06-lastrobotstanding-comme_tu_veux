@@ -44,7 +44,11 @@ string SonnyRobot::action(vector <string> updates) {
 
     target = targetToLock();
 
-    return "move " + (string)Point::wrap(target, -1, 1);
+    Point normalize = Point::wrap(target, -1, 1);
+
+    normalize.y *= -1;
+
+    return "move " + (string)normalize;
 }
 
 /*
