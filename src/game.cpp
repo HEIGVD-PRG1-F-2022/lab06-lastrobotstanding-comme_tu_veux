@@ -46,29 +46,7 @@ void Game::startGame() {
             generateBoni(1);
         }
 
-        // Translate vector of entitiesState elements to string to display
-        for (const auto &entity: entitiesState) {
-            if(entity.disabled) {
-                continue;
-            }
-
-            char entityChar;
-
-            if (entity.type == State::Type::Robot) {
-                entityChar = 'R';
-            }
-
-            if (entity.type == State::Type::Bonus) {
-                entityChar = 'B';
-            }
-
-            grid.at((size_t)entity.coords.y).at((size_t)entity.coords.x) = entityChar;
-        }
-
-        // Display grid with libdio
-        Display::saveCursorPosition();
-        cout << Display::displayGrid<string>(grid, false);
-        Display::restoreCursorPosition();
+        display();
 
 
 //        // Process each robot action
@@ -231,6 +209,32 @@ size_t Game::getNewId() {
                           });
 
     return it != entitiesState.end() ? it->getId() + 1 : 0;
+}
+
+void Game::display() {
+    // Translate vector of entitiesState elements to string to display
+    for (const auto &entity: entitiesState) {
+        if (entity.disabled) {
+            continue;
+        }
+
+        char entityChar;
+
+        if (entity.type == State::Type::Robot) {
+            entityChar = 'R';
+        }
+
+        if (entity.type == State::Type::Bonus) {
+            entityChar = 'B';
+        }
+
+        grid.at((size_t) entity.coords.y).at((size_t) entity.coords.x) = entityChar;
+    }
+
+    // Display grid with libdio
+    Display::saveCursorPosition();
+    cout << Display::displayGrid<string>(grid, false);
+    Display::restoreCursorPosition();
 }
 
 

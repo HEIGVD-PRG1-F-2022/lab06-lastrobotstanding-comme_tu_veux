@@ -51,6 +51,11 @@ public:
     void startGame();
 
     /**
+     * Display gameboard with all entites
+     */
+    void display();
+
+    /**
      * Generate a random free Point, it check if position is not already take by another entity
      * @return Point
      */
@@ -61,7 +66,6 @@ public:
      * @return
      */
     size_t getNewId();
-
 
     /**
      * Generate and add robot entities into the state manager
