@@ -102,7 +102,7 @@ void Game::startGame() {
                 continue;
             }
 
-            vector<string> actionParameters = split(robotState.robot->action({"board R               B      RX"}), " ", 2);
+            vector<string> actionParameters = split(robotState.robot->action({"board R               B      R "}), " ", 2);
 
             string action = actionParameters.at(0);
             string parameters = actionParameters.at(1);

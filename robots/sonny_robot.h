@@ -25,6 +25,8 @@ class SonnyRobot : public Robot {
 
     const std::string ROBOT_NAME = "Sonny";
 
+    const int FIELD_OF_VIEW = 5;
+
     size_t mapWidth = 0, mapHeight = 0;
     unsigned energy = 0, power = 0;
 
