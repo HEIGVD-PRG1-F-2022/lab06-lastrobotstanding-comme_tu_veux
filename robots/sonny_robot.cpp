@@ -37,9 +37,7 @@ string SonnyRobot::action(vector <string> updates) {
             case Action::Name::DAMAGE:
                 vector <string> damageInfo = split(parameters, ",", 3);
                 attacker = Point(damageInfo.at(0), damageInfo.at(1));
-                energy -= stoi(damageInfo.at(2));
-                break;
-            default:
+                energy -= (unsigned)stoi(damageInfo.at(2));
                 break;
         }
         updates.erase(find(updates.begin(), updates.end(), update));
