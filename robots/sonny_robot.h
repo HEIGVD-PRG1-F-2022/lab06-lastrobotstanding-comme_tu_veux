@@ -33,6 +33,7 @@ class SonnyRobot : public Robot {
 
     std::vector<std::vector<std::string>> internalMap;
 
+    std::vector<std::vector<std::string>> fromStringToMap(std::string map);
 
 
 public:

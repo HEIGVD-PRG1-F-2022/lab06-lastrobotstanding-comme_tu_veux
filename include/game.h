@@ -29,6 +29,8 @@ class Game
 public:
     void startGame();
 
+    void generateRobots(const std::vector<std::vector<std::string>> &grid, std::vector<RobotState> &robotsState, unsigned nbRobots);
+
     std::string attack(Point coords, RobotState &attacker);
 
     std::string damage(Point coords, RobotState &attacker);

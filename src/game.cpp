@@ -26,11 +26,25 @@ using namespace std;
 
 const size_t NB_ROBOT = 2;
 const size_t SIZE_GRID = NB_ROBOT * 10;
+const unsigned DEFAULT_ENERGY = 10;
+const unsigned DEFAULT_POWER = 1;
+const unsigned DEFAULT_FIELDOFVIEW = 5;
+
+void Game::generateRobots(const vector<vector<string>> &grid, vector<RobotState> &state, unsigned int nbRobots) {
+    for (int i = 0; i < nbRobots; i++) {
+        state.push_back(
+                RobotState(
+                        new SonnyRobot(),
+                        getFreeRandomPoint(grid),
+                        DEFAULT_FIELDOFVIEW,
+                        DEFAULT_ENERGY,
+                        DEFAULT_POWER
+                )
+        );
+    }
+}
 
 void Game::startGame() {
-    robotsState.push_back(RobotState(new SonnyRobot(), Point(6, 1), 5, 10, 1));
-    robotsState.push_back(RobotState(new SonnyRobot(), Point(6, 3), 5, 10, 1));
-
     vector<vector<string>> grid(SIZE_GRID, vector<string>(SIZE_GRID));
     Display::init();
     time_t start, end;
@@ -38,9 +52,11 @@ void Game::startGame() {
     unsigned short counter = 0;
     bool attackFlag = false;
 
+    generateRobots(grid, robotsState, NB_ROBOT);
+
     while (true) {
         // Generate bonus every 20 turns
-        if (!(counter % 20)) {
+        if (!(counter % 20) && counter != 0) {
             boni.push_back(generateBonus(getFreeRandomPoint(grid)));
         }
 
@@ -52,7 +68,9 @@ void Game::startGame() {
                 grid.at(y).at(x) = "";
 
                 if (any_of(robotsState.begin(), robotsState.end(),
-                           [&x, &y](RobotState r) { return r.getCoords() == Point((int) x, (int) y) && r.getAliveState();})) {
+                           [&x, &y](RobotState r) {
+                               return r.getCoords() == Point((int) x, (int) y) && r.getAliveState();
+                           })) {
                     grid.at(y).at(x) = "R";
                 }
 
@@ -79,7 +97,12 @@ void Game::startGame() {
 
         // Process each robot action
         for (size_t index = 0; auto &robotState: robotsState) {
-            vector<string> actionParameters = split(robotState.robot->action(robotState.getUpdates()), " ", 2);
+            // If robot is dead, skip it
+            if (!robotState.getAliveState()) {
+                continue;
+            }
+
+            vector<string> actionParameters = split(robotState.robot->action({"board R               B      R "}), " ", 2);
 
             string action = actionParameters.at(0);
             string parameters = actionParameters.at(1);
@@ -110,7 +133,7 @@ void Game::startGame() {
             counter = 10;
         }
 
-        //this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::milliseconds(20));
         ++counter;
     }
 }
@@ -135,11 +158,11 @@ string Game::damage(const Point coords, RobotState &attacker) {
 
         unsigned attackPower = dist < 2 ? attacker.getPower() * 2 : dist < 3 ? attacker.getPower() : 0;
 
-        action = Action::generateDamage(attacker.getCoords(),attackPower);
+        action = Action::generateDamage(attacker.getCoords(), attackPower);
 
         robot->setEnergy(robot->getEnergy() - attackPower);
 
-        if(robot->getEnergy() <= 0){
+        if (robot->getEnergy() <= 0) {
             robot->die();
         }
         robot->addUpdate(action);
@@ -177,7 +200,11 @@ std::string Game::move(const Point direction, RobotState &robot) {
 }
 
 Point Game::getFreeRandomPoint(const vector<vector<string>> &grid) {
+    typedef std::chrono::high_resolution_clock myclock;
+    myclock::time_point beginning = myclock::now();
+
     default_random_engine generator;
+    generator.seed((myclock::now() - beginning).count());
     uniform_int_distribution<int> distribution(0, (int) grid.size() - 1);
 
     // Will search for a free point on the grid until it finds one
@@ -211,3 +238,4 @@ Bonus Game::generateBonus(const Point coords) {
 
     return {coords, type, distribution_amount(generator)};
 }
+

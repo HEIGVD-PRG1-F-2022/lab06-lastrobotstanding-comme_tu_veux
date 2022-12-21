@@ -22,10 +22,6 @@ using namespace std;
 
 string SonnyRobot::action(vector<string> updates) {
     for (const string &update: updates) {
-        if (update.empty()) {
-            continue;
-        }
-
         vector<string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
@@ -36,7 +32,7 @@ string SonnyRobot::action(vector<string> updates) {
 
         switch (Action::resolveAction(action)) {
             case Action::Name::BOARD:
-                cout << "BOARD" << endl;
+                internalMap = fromStringToMap(parameters);
                 break;
             case Action::Name::DAMAGE:
                 //cout << "DAMAGE" << parameters << endl;
@@ -62,15 +58,14 @@ string SonnyRobot::action(vector<string> updates) {
     target = targetToLock();
 
 
-
     return "attack 0,-2";
 }
 
-    /*
-     * 	Cherche Bonus : si robot plus proche de bonus regarde si il peut attack sinon fuite
-     * 	attack robot seulement si energy suffisante
-     * 	move diagonale
-     */
+/*
+ * 	Cherche Bonus : si robot plus proche de bonus regarde si il peut attack sinon fuite
+ * 	attack robot seulement si energy suffisante
+ * 	move diagonale
+ */
 
 /*  string action = " ";
 
@@ -115,20 +110,36 @@ string SonnyRobot::name() const {
 }
 
 Point SonnyRobot::targetToLock() {
-    int xCenter = (mapWidth - 1)/2;
-    int yCenter = (mapHeight -1)/2;
-    Point sonny(xCenter,yCenter);
-    Point shortestPoint(0,0);
+    int xCenter = (mapWidth - 1) / 2;
+    int yCenter = (mapHeight - 1) / 2;
+    Point sonny(xCenter, yCenter);
+    Point shortestPoint(0, 0);
 
-    for (size_t y = 0; y < internalMap.size(); ++y)  {
-        for (size_t x = 0; x < internalMap.at(y).size(); ++x){
+    for (size_t y = 0; y < internalMap.size(); ++y) {
+        for (size_t x = 0; x < internalMap.at(y).size(); ++x) {
             if (!internalMap.at(y).at(x).empty()) {
                 Point current(x, y);
-                if(sonny.distance(current) < sonny.distance(shortestPoint)) {
+                if (sonny.distance(current) < sonny.distance(shortestPoint)) {
                     shortestPoint = current;
                 }
             }
         }
     }
     return Point();
+}
+
+vector<vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
+    vector<vector<string>> mapVector;
+
+    for (size_t y = 0; y < mapHeight; ++y) {
+        vector<string> line;
+        for (size_t x = 0; x < mapWidth; ++x) {
+            int offset = y * (mapWidth);
+            string car = map.substr(x + offset, 1);
+            line.push_back(car);
+        }
+        mapVector.push_back(line);
+    }
+
+    return mapVector;
 }
