@@ -31,6 +31,10 @@ class SonnyRobot : public Robot {
     Point target;
     Point targetToLock();
 
+    Point attacker;
+
+    Point getCenterMap();
+
     std::vector<std::vector<std::string>> internalMap;
 
     std::vector<std::vector<std::string>> fromStringToMap(std::string map);

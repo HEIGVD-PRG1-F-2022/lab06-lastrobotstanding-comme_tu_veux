@@ -20,9 +20,9 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 using namespace std;
 
-string SonnyRobot::action(vector<string> updates) {
+string SonnyRobot::action(vector <string> updates) {
     for (const string &update: updates) {
-        vector<string> actionParameters = split(update, " ", 2);
+        vector <string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
         string parameters;
@@ -35,19 +35,9 @@ string SonnyRobot::action(vector<string> updates) {
                 internalMap = fromStringToMap(parameters);
                 break;
             case Action::Name::DAMAGE:
-                //cout << "DAMAGE" << parameters << endl;
-                break;
-            case Action::Name::MOVE:
-                cout << "MOVE" << endl;
-                break;
-            case Action::Name::ATTACK:
-                cout << "ATTACK" << endl;
-                break;
-            case Action::Name::WAIT:
-                cout << "WAIT" << endl;
-                break;
-            case Action::Name::BONUS:
-                cout << "BONUS" << endl;
+                vector <string> damageInfo = split(parameters, ",", 3);
+                attacker = Point(damageInfo.at(0), damageInfo.at(1));
+                energy -= stoi(damageInfo.at(2));
                 break;
             default:
                 break;
@@ -58,7 +48,7 @@ string SonnyRobot::action(vector<string> updates) {
     target = targetToLock();
 
 
-    return "attack 0,-2";
+    return "move " + (string)target;
 }
 
 /*
@@ -125,14 +115,14 @@ Point SonnyRobot::targetToLock() {
             }
         }
     }
-    return Point();
+    return shortestPoint;
 }
 
-vector<vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
-    vector<vector<string>> mapVector;
+vector <vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
+    vector <vector<string>> mapVector;
 
     for (size_t y = 0; y < mapHeight; ++y) {
-        vector<string> line;
+        vector <string> line;
         for (size_t x = 0; x < mapWidth; ++x) {
             int offset = y * (mapWidth);
             string car = map.substr(x + offset, 1);
@@ -142,4 +132,10 @@ vector<vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
     }
 
     return mapVector;
+}
+
+Point SonnyRobot::getCenterMap() {
+    int x = (mapWidth - 1) / 2;
+    int y = (mapHeight - 1) / 2;
+    return {x, y};
 }
