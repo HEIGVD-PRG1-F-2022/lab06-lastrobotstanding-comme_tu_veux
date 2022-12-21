@@ -22,6 +22,10 @@ using namespace std;
 
 string SonnyRobot::action(vector <string> updates) {
     for (const string &update: updates) {
+        if(update.empty()) {
+            continue;
+        }
+
         vector <string> actionParameters = split(update, " ", 2);
 
         string action = actionParameters.at(0);
@@ -45,7 +49,7 @@ string SonnyRobot::action(vector <string> updates) {
 
     target = targetToLock();
 
-    return "move " + (string)target;
+    return "move " + (string)Point::wrap(target, -1, 1);
 }
 
 /*
