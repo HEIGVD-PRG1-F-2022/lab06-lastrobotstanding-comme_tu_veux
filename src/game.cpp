@@ -52,7 +52,7 @@ void Game::startGame() {
                 continue;
             }
 
-            vector<string> actionParameters = split(robotState.robot->action(robotState.getCurrentUpdate()), " ", 2);
+            vector<string> actionParameters = split(robotState.robot->action({getRobotView(robotState.coords)}), " ", 2);
 
             string action = actionParameters.at(0);
             string parameters = actionParameters.at(1);
@@ -229,6 +229,25 @@ void Game::display() {
     Display::saveCursorPosition();
     cout << Display::displayGrid<string>(grid, false);
     Display::restoreCursorPosition();
+}
+
+std::string Game::getRobotView(Point coords) {
+    int topLeft = int(DEFAULT_FIELDOFVIEW -1 / 2);
+    coords -= Point(topLeft,topLeft);
+
+    string map;
+
+    for(size_t y = 0; y < DEFAULT_FIELDOFVIEW; ++y){
+        for(size_t x = 0; x < DEFAULT_FIELDOFVIEW; ++x) {
+            Point s = coords + Point(x,y);
+            Point::wrap(s, 0, SIZE_GRID -1);
+
+            map.push_back((grid.at((size_t)s.y).at((size_t)s.x).empty() ? ' ' : grid.at((size_t)s.y).at((size_t)s.x).at(0)));
+        }
+    }
+
+
+    return "board " + map;
 }
 
 

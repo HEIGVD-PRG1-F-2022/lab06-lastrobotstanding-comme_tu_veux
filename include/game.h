@@ -73,6 +73,7 @@ public:
      */
     size_t getUniqueRobotId();
 
+    std::string getRobotView(Point coords);
 
     /**
      * Generate and add robot entities into the state manager
