@@ -39,6 +39,16 @@ string SonnyRobot::action(vector<string> updates) {
                 attacker = Point(damageInfo.at(0), damageInfo.at(1));
                 energy -= (unsigned) stoi(damageInfo.at(2));
                 break;
+            case Action::NOTDEFINED:
+                break;
+            case Action::MOVE:
+                break;
+            case Action::ATTACK:
+                break;
+            case Action::WAIT:
+                break;
+            case Action::BONUS:
+                break;
         }
     }
 
@@ -106,12 +116,12 @@ Point SonnyRobot::targetToLock() {
 
     for (size_t y = 0; y < internalMap.size(); ++y) {
         for (size_t x = 0; x < internalMap.at(y).size(); ++x) {
-            if (!internalMap.at(y).at(x).empty()) {
+            string object = internalMap.at(y).at(x);
+            if (!object.empty()) {
                 Point current(x, y);
                 if (sonny.distance(current) < sonny.distance(shortestPoint)) {
                     shortestPoint = current;
-
-                    switch(internalMap.at(y).at(x).at(0)){
+                    switch(object.at(0)){
                         case 'R':
                             if (energy < 15){
                                 Point d = current.normalize();
