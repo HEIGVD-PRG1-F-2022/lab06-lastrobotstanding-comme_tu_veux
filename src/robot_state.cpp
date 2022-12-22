@@ -28,10 +28,10 @@ unsigned RobotState::getPower() {
 }
 
 void RobotState::addUpdate(const std::string &update) {
-    this->updates.push_back(update);
+    this->nextUpdates.push_back(update);
 }
 
-std::vector<std::string> RobotState::getUpdates() {
+std::vector<std::string> RobotState::getCurrentUpdate() {
     return updates;
 }
 

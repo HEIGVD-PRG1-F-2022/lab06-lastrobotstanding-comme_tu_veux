@@ -14,8 +14,6 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <thread>
 #include <chrono>
 #include <libdio/display.h>
-#include <iomanip>
-#include <random>
 #include "librobots/Message.h"
 
 #include "../include/game.h"
@@ -48,41 +46,31 @@ void Game::startGame() {
 
         display();
 
-        for (RobotState robot: robotsState) {
-            // skip robot if dead
-            if (robot.disable) {
+        for (RobotState &robotState: robotsState) {
+            // skip robotState if dead
+            if (robotState.disable) {
                 continue;
             }
-        }
 
-//        // Process each robot action
-//        for (size_t index = 0; auto &robotState: robotsState) {
-//            // If robot is dead, skip it
-//            if (!robotState.getAliveState()) {
-//                continue;
-//            }
-//
-//            vector<string> actionParameters = split(robotState.robot->action({"board R               B      R "}), " ",
-//                                                    2);
-//
-//            string action = actionParameters.at(0);
-//            string parameters = actionParameters.at(1);
-//
-//            switch (Action::resolveAction(action)) {
-//                case Action::Name::ATTACK:
-//                    attackFlag = true;
-//                    attack(Point::fromStrToPoint(parameters), robotState);
-//                    break;
-//                case Action::Name::MOVE:
-//                    move(Point::fromStrToPoint(parameters), robotState);
-//                    break;
-//                case Action::Name::WAIT:
-//                    break;
-//                default:
-//                    break;
-//            }
-//            ++index;
-//        }
+            vector<string> actionParameters = split(robotState.robot->action(robotState.getCurrentUpdate()), " ", 2);
+
+            string action = actionParameters.at(0);
+            string parameters = actionParameters.at(1);
+
+            switch (Action::resolveAction(action)) {
+                case Action::Name::ATTACK:
+                    attackFlag = true;
+                    attack(Point::fromStrToPoint(parameters), robotState);
+                    break;
+                case Action::Name::MOVE:
+                    move(Point::fromStrToPoint(parameters), robotState);
+                    break;
+                case Action::Name::WAIT:
+                    break;
+                default:
+                    break;
+            }
+        }
 
         // Check if there was an attack in the last 100 turns if not end the game
         if (roundCount > 100) {
@@ -109,71 +97,62 @@ void Game::generateRobots(unsigned nbRobots) {
                 DEFAULT_ENERGY,
                 DEFAULT_POWER
         );
-
     }
 }
 
 
-//string Game::damage(const Point coords, RobotState &attacker) {
-//    string action;
-//
-//    Point attackerCoords = attacker.getCoords();
-//
-//    Point delta = attackerCoords + coords;
-//
-//    // Search robot to attack iterator
-//    auto robot = find_if(this->robotsState.begin(), this->robotsState.end(),
-//                         [&delta](RobotState r) {
-//                             return r.getCoords() == delta;
-//                         });
-//
-//    if (robot != this->robotsState.end()) {
-//        // Add the information that he took damage from attacker
-//
-//        int dist = attacker.getCoords().distance(robot->getCoords());
-//
-//        unsigned attackPower = dist < 2 ? attacker.getPower() * 2 : dist < 3 ? attacker.getPower() : 0;
-//
-//        action = Action::generateDamage(attacker.getCoords(), attackPower);
-//
-//        robot->setEnergy(robot->getEnergy() - attackPower);
-//
-//        if (robot->getEnergy() <= 0) {
-//            robot->die();
-//        }
-//        robot->addUpdate(action);
-//    }
-//
-//    return action;
-//}
-//
-//string Game::attack(const Point coords, RobotState &attacker) {
-//    return Game::damage(coords, attacker);
-//}
-//
-//bool Game::isRobotAt(Point coords) {
-//    auto it = find_if_not(robotsState.begin(), robotsState.end(),
-//                          [&coords](RobotState robotState) {
-//                              return robotState == coords;
-//                          });
-//    return it != robotsState.end();
-//}
-//
-//std::string Game::move(const Point direction, RobotState &robot) {
-//    // check if the x value is between -1 and 1 and the y value is between -1 and 1 with ternary operator
-//    Point newDirection = {direction.x <= -1 ? -1 : direction.x >= 1 ? 1 : direction.x,
-//                          direction.y <= -1 ? -1 : direction.y >= 1 ? 1 : direction.y};
-//
-//    // Search robot to attack iterator
-//    auto robotOnMap = find_if(this->robotsState.begin(), this->robotsState.end(),
-//                              [&robot](RobotState r) {
-//                                  return r.getCoords() == robot.getCoords();
-//                              });
-//    // TODO: check if there is multiple robot on the same position
-//    Point::wrap(robot.getCoords() += newDirection, 0, SIZE_GRID);
-//
-//    return "move " + (string) newDirection;
-//}
+string Game::damage(const Point coords, RobotState &attacker) {
+    string action;
+
+    Point attackerCoords = attacker.coords;
+
+    Point delta = attackerCoords + coords;
+
+    // Search robot to attack iterator
+    auto robot = find_if(this->robotsState.begin(), this->robotsState.end(),
+                         [&delta](RobotState r) {
+                             return r.coords == delta;
+                         });
+
+    if (robot != this->robotsState.end()) {
+        // Add the information that he took damage from attacker
+
+        int dist = attacker.coords.distance(robot->coords);
+
+        unsigned attackPower = dist < 2 ? attacker.getPower() * 2 : dist < 3 ? attacker.getPower() : 0;
+
+        action = Action::generateDamage(attacker.coords, attackPower);
+
+        robot->setEnergy(robot->getEnergy() - attackPower);
+
+        if (robot->getEnergy() <= 0) {
+            robot->disable = true;
+        }
+        robot->addUpdate(action);
+    }
+
+    return action;
+}
+
+string Game::attack(const Point coords, RobotState &attacker) {
+    return Game::damage(coords, attacker);
+}
+
+std::string Game::move(Point direction, RobotState &robot) {
+    // Search robot to attack iterator
+    auto robotOnMap = find_if(this->robotsState.begin(), this->robotsState.end(),
+                              [&robot](RobotState r) {
+                                  return r.coords == robot.coords;
+                              });
+
+    // TODO: check if there is multiple robot on the same position
+
+    robot.coords += direction.normalize();
+
+    Point::wrap(robot.coords, 0, SIZE_GRID - 1);
+
+    return "move " + (string) direction.normalize();
+}
 
 Point Game::getFreeRandomPoint() {
     uniform_int_distribution<int> rand(0, SIZE_GRID - 1);
@@ -226,12 +205,16 @@ size_t Game::getUniqueRobotId() {
 
 
 void Game::display() {
-    // Translate vector of entitiesState elements to string to display
+    for(auto &y : grid){
+        for(auto &x : y) {
+            x = "";
+        }
+    }
+
     for (const auto &robot: robotsState) {
         if (robot.disable) {
             continue;
         }
-
         grid.at((size_t) robot.coords.y).at((size_t) robot.coords.x) = "R";
     }
 

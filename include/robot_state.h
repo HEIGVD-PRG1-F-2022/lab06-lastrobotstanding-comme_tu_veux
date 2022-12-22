@@ -49,8 +49,17 @@ public:
      */
     Point coords;
 
+    /**
+     * Give a list of all the robot need to do
+     * @return
+     */
+    std::vector<std::string> getCurrentUpdate();
 
-    std::vector<std::string> getUpdates();
+    /**
+     * Push to the **NEXT** update list elements
+     * @param update
+     */
+    void addUpdate(const std::string &update);
 
     unsigned getPower();
 
@@ -60,7 +69,7 @@ public:
 
     void setEnergy(unsigned energy);
 
-    void addUpdate(const std::string &update);
+
 };
 
 #endif //ROBOT_ROBOT_STATE_H
