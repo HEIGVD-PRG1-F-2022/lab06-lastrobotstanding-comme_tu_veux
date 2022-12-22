@@ -46,6 +46,8 @@ string SonnyRobot::action(vector<string> updates) {
 
     target -= getCenterMap();
 
+    target.y *= -1;
+
     return "move " + (string) target.normalize();
 }
 
