@@ -31,14 +31,6 @@ string SonnyRobot::action(vector<string> updates) {
         }
 
         switch (Action::resolveAction(action)) {
-            case Action::Name::BOARD:
-                internalMap = fromStringToMap(parameters);
-                break;
-            case Action::Name::DAMAGE:
-                vector<string> damageInfo = split(parameters, ",", 3);
-                attacker = Point(damageInfo.at(0), damageInfo.at(1));
-                energy -= (unsigned) stoi(damageInfo.at(2));
-                break;
             case Action::NOTDEFINED:
                 break;
             case Action::MOVE:
@@ -48,6 +40,14 @@ string SonnyRobot::action(vector<string> updates) {
             case Action::WAIT:
                 break;
             case Action::BONUS:
+                break;
+            case Action::Name::BOARD:
+                internalMap = fromStringToMap(parameters);
+                break;
+            case Action::Name::DAMAGE:
+                vector<string> damageInfo = split(parameters, ",", 3);
+                attacker = Point(damageInfo.at(0), damageInfo.at(1));
+                energy -= (unsigned) stoi(damageInfo.at(2));
                 break;
         }
     }
