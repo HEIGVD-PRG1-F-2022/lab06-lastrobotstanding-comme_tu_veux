@@ -103,6 +103,8 @@ void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, uns
     this->mapHeight = height;
     this->energy = energy;
     this->power = power;
+
+    this->map= vector(mapHeight, vector<string>(mapWidth, ""));
 }
 
 string SonnyRobot::name() const {
