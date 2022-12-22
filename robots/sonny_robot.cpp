@@ -43,10 +43,10 @@ string SonnyRobot::action(vector<string> updates) {
     }
 
     target = targetToLock();
-
     target -= getCenterMap();
-
     target.y *= -1;
+
+    ++counter;
 
     return "move " + (string) target.normalize();
 }
@@ -110,6 +110,17 @@ Point SonnyRobot::targetToLock() {
                 Point current(x, y);
                 if (sonny.distance(current) < sonny.distance(shortestPoint)) {
                     shortestPoint = current;
+
+                    switch(internalMap.at(y).at(x).at(0)){
+                        case 'R':
+                            if (energy < 15){
+                                Point d = current.normalize();
+                                d.x *= -1;
+                                d.y *= -1;
+                                shortestPoint = d;
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -137,3 +148,4 @@ Point SonnyRobot::getCenterMap() {
     int y = (mapHeight - 1) / 2;
     return {x, y};
 }
+
