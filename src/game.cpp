@@ -32,7 +32,6 @@ void Game::setupGame() {
     this->grid = Map(SIZE_GRID, vector<string>(SIZE_GRID));
 
     generateRobots(Game::NB_ROBOT);
-    generateBoni(2);
 }
 
 void Game::startGame() {
