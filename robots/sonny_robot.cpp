@@ -54,6 +54,9 @@ string SonnyRobot::action(vector<string> updates) {
 
     target = targetToLock();
     target -= getCenterMap();
+
+    target.y *= -1;
+
     ++counter;
 
     return "move " + (string) target.normalize();
