@@ -16,16 +16,25 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #define ROBOT_BONUS_STATE_H
 
 #include "../robots/point.h"
-#include "state.h"
 
-class BonusState : public State {
+class BonusState {
 public:
     enum class Type {
         Energy,
         PowerUp
     };
 
-    BonusState(size_t id, Point coords, Type bonusType, unsigned amount);
+    BonusState(Point coords, Type bonusType, unsigned amount);
+
+    /**
+     * State if the entity should be use or not
+     */
+    bool disable = false;
+
+    /**
+     * Coords of the state using Cartesian coordinate system (x,y)
+     */
+    Point coords;
 
     unsigned getAmount();
 

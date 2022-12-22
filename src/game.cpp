@@ -48,6 +48,12 @@ void Game::startGame() {
 
         display();
 
+        for (RobotState robot: robotsState) {
+            // skip robot if dead
+            if (robot.disable) {
+                continue;
+            }
+        }
 
 //        // Process each robot action
 //        for (size_t index = 0; auto &robotState: robotsState) {
@@ -95,14 +101,15 @@ void Game::startGame() {
 
 void Game::generateRobots(unsigned nbRobots) {
     for (unsigned i = 0; i < nbRobots; i++) {
-        entitiesState.push_back(
-                RobotState(getNewId(),
-                           new SonnyRobot(),
-                           getFreeRandomPoint(),
-                           DEFAULT_FIELDOFVIEW,
-                           DEFAULT_ENERGY,
-                           DEFAULT_POWER)
+        robotsState.emplace_back(
+                getUniqueRobotId(),
+                getFreeRandomPoint(),
+                new SonnyRobot(),
+                DEFAULT_FIELDOFVIEW,
+                DEFAULT_ENERGY,
+                DEFAULT_POWER
         );
+
     }
 }
 
@@ -174,9 +181,15 @@ Point Game::getFreeRandomPoint() {
     while (true) {
         Point p(rand(randomGenerator), rand(randomGenerator));
 
-        if (!any_of(entitiesState.begin(), entitiesState.end(), [&p](auto &entity) { return entity.coords == p; })) {
-            return p;
+        if (any_of(robotsState.begin(), robotsState.end(), [&p](RobotState &r) { return r.coords == p; })) {
+            continue;
         }
+
+        if (any_of(boniState.begin(), boniState.end(), [&p](BonusState &b) { return b.coords == p; })) {
+            continue;
+        }
+
+        return p;
     }
 }
 
@@ -198,37 +211,35 @@ void Game::generateBoni(unsigned nbBoni) {
 
         uniform_int_distribution<unsigned> rand_bonus_amount(1, max_value);
 
-        entitiesState.push_back(BonusState(getNewId(), getFreeRandomPoint(), type, rand_bonus_amount(randomGenerator)));
+        boniState.emplace_back(getFreeRandomPoint(), type, rand_bonus_amount(randomGenerator));
     }
 }
 
-size_t Game::getNewId() {
-    auto it = max_element(entitiesState.begin(), entitiesState.end(),
+size_t Game::getUniqueRobotId() {
+    auto it = max_element(robotsState.begin(), robotsState.end(),
                           [](auto &lhs, auto &rhs) {
                               return lhs.getId() < rhs.getId();
                           });
 
-    return it != entitiesState.end() ? it->getId() + 1 : 0;
+    return it != robotsState.end() ? it->getId() + 1 : 0;
 }
+
 
 void Game::display() {
     // Translate vector of entitiesState elements to string to display
-    for (const auto &entity: entitiesState) {
-        if (entity.disabled) {
+    for (const auto &robot: robotsState) {
+        if (robot.disable) {
             continue;
         }
 
-        char entityChar;
+        grid.at((size_t) robot.coords.y).at((size_t) robot.coords.x) = "R";
+    }
 
-        if (entity.type == State::Type::Robot) {
-            entityChar = 'R';
+    for (const auto &bonus: boniState) {
+        if (bonus.disable) {
+            continue;
         }
-
-        if (entity.type == State::Type::Bonus) {
-            entityChar = 'B';
-        }
-
-        grid.at((size_t) entity.coords.y).at((size_t) entity.coords.x) = entityChar;
+        grid.at((size_t) bonus.coords.y).at((size_t) bonus.coords.x) = "B";
     }
 
     // Display grid with libdio
@@ -236,7 +247,6 @@ void Game::display() {
     cout << Display::displayGrid<string>(grid, false);
     Display::restoreCursorPosition();
 }
-
 
 
 

@@ -20,18 +20,35 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include "librobots/Robot.h"
 #include "../robots/point.h"
-#include "state.h"
 
-class RobotState : public State {
+class RobotState {
+    size_t id;
+
     unsigned energy, power;
 
-    bool isAlive = true;
-
     std::vector<std::string> updates;
+    std::vector<std::string> nextUpdates;
 public:
+    Robot *robot;
 
-    class Robot *robot;
-    RobotState(size_t id, class Robot *robot, Point coords, size_t fieldOfView, unsigned int energy, unsigned int power);
+    RobotState(size_t id, Point coords, Robot *robot, size_t fieldOfView, unsigned int energy, unsigned int power);
+
+    /**
+     * State if the entity should be use or not
+     */
+    bool disable = false;
+
+    /**
+     * Get id set at the instantiation.
+     * @return size_t id
+     */
+    size_t getId() const;
+
+    /**
+     * Coords of the state using Cartesian coordinate system (x,y)
+     */
+    Point coords;
+
 
     std::vector<std::string> getUpdates();
 
@@ -43,14 +60,7 @@ public:
 
     void setEnergy(unsigned energy);
 
-    bool getAliveState();
-
-    void die();
-
-
     void addUpdate(const std::string &update);
-
-    bool operator==(Point coords) const;
 };
 
 #endif //ROBOT_ROBOT_STATE_H

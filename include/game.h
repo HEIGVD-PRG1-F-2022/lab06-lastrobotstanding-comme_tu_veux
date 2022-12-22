@@ -18,12 +18,16 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include <chrono>
 #include <random>
-
 #include "librobots/Robot.h"
-#include "robot_state.h"
+
 #include "../robots/point.h"
+
+#include "robot_state.h"
 #include "bonus_state.h"
-#include "state.h"
+
+
+
+
 
 class Game {
     static const size_t NB_ROBOT = 2;
@@ -39,7 +43,9 @@ class Game {
     std::default_random_engine randomGenerator;
 
     Map grid;
-    std::vector<State> entitiesState;
+
+    std::vector<RobotState> robotsState;
+    std::vector<BonusState> boniState;
 
     size_t roundCount = 0;
 
@@ -65,7 +71,8 @@ public:
      * Generate a new unique id to use for an entity
      * @return
      */
-    size_t getNewId();
+    size_t getUniqueRobotId();
+
 
     /**
      * Generate and add robot entities into the state manager
@@ -84,9 +91,6 @@ public:
     std::string damage(Point coords, RobotState &attacker);
 
     std::string move(Point coords, RobotState &robot);
-
-
-
 
 
     bool isRobotAt(Point coords);

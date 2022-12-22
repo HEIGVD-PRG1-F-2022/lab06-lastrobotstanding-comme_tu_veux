@@ -14,8 +14,7 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 #include "../include/bonus_state.h"
 
-BonusState::BonusState(size_t id, Point coords, BonusState::Type bonusType, unsigned int amount) : State(id) {
-    this->type = State::Type::Bonus;
+BonusState::BonusState(Point coords, Type bonusType, unsigned amount) {
     this->coords = coords;
     this->bonusType = bonusType;
     this->amount = amount;
