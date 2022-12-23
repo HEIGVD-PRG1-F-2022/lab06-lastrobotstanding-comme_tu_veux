@@ -276,7 +276,7 @@ void Game::display() {
 std::string Game::getRobotBoard(Point coords) {
 
     // Start scanning on the top left relative to the coords
-    size_t offset = int((DEFAULT_FIELDOFVIEW - 1) / 2);
+    size_t offset = size_t((DEFAULT_FIELDOFVIEW - 1) / 2);
 
     string map;
 
@@ -288,7 +288,7 @@ std::string Game::getRobotBoard(Point coords) {
                 continue;
             }
 
-            Point s = coords + Point(x - offset, y - offset);
+            Point s = coords + Point((int)x - (int)offset, (int)y - (int)offset);
             Point::wrap(s, 0, SIZE_GRID - 1);
 
             // Scan
