@@ -40,9 +40,21 @@ class SonnyRobot : public Robot {
 
     [[nodiscard]] Point getCenterMap() const;
 
+    /**
+     * Internal view of the robot for it's proxmity mapping
+     */
     std::vector<std::vector<std::string>> internalMap;
+
+    /**
+     * Real size 2D array to store boni
+     */
     std::vector<std::vector<std::string>> map;
 
+    /**
+     * Convert string to a 2D array exploitable map
+     * @param map
+     * @return
+     */
     std::vector<std::vector<std::string>> fromStringToMap(std::string map);
 
 
