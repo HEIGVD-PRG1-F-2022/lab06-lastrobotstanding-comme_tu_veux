@@ -32,16 +32,13 @@ void Game::setupGame() {
     this->grid = Map(SIZE_GRID, vector<string>(SIZE_GRID));
 
     generateRobots(Game::NB_ROBOT);
-    generateBoni(120);
 }
 
 void Game::startGame() {
 
     bool attackFlag = false;
 
-    for (RobotState &robotState: robotsState) {
-        robotState.addUpdate(getRobotView(robotState.coords));
-    }
+    getRobotsView(this->robotsState);
 
     while (true) {
         // Generate bonus every 20 turns
@@ -87,9 +84,8 @@ void Game::startGame() {
             roundCount = 1;
         }
 
-        getRobotsView(this->robotsState);
-
         for (RobotState &robotState: this->robotsState) {
+            robotState.addUpdate(getRobotView(robotState.coords));
             robotState.execUpdate();
         }
 
@@ -280,7 +276,7 @@ void Game::display() {
           << " Power : "
           << robotState.getPower()
           << " : "
-          << (!robotState.getCurrentUpdate().empty() ? robotState.getCurrentUpdate().back() : "")
+          << (!robotState.getCurrentUpdate().empty() ? robotState.getCurrentUpdate().front() : "")
           << "\n";
     }
     d.print();
@@ -289,12 +285,16 @@ void Game::display() {
 }
 
 std::string Game::getRobotView(Point coords) {
-    size_t offset = int(DEFAULT_FIELDOFVIEW - 1 / 2);
+    size_t offset = int((DEFAULT_FIELDOFVIEW - 1) / 2);
 
     string map;
 
     for (size_t y = 0; y < DEFAULT_FIELDOFVIEW; ++y) {
         for (size_t x = 0; x < DEFAULT_FIELDOFVIEW; ++x) {
+            if(x == offset && y == offset){
+                map += " ";
+                continue;
+            }
             Point s = coords + Point(x - offset, y - offset);
             Point::wrap(s, 0, SIZE_GRID - 1);
 
@@ -313,6 +313,7 @@ std::string Game::getRobotView(Point coords) {
 
             map += entity;
         }
+
     }
 
 
@@ -320,7 +321,7 @@ std::string Game::getRobotView(Point coords) {
 }
 
 void Game::getRobotsView(vector<RobotState> &r) {
-    for (RobotState robotState: r) {
+    for (RobotState &robotState: r) {
         robotState.addUpdate(getRobotView(robotState.coords));
     }
 }

@@ -13,6 +13,8 @@ Compiler        : Mingw-w64 g++ 11.2.0
 */
 
 #include <librobots/Message.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "sonny_robot.h"
 #include "action.h"
@@ -52,7 +54,7 @@ string SonnyRobot::action(vector<string> updates) {
 
     ++counter;
 
-    return "move " + (string) target.normalize();
+    return actionType + " " + (string) target.normalize();
 }
 
 /*
@@ -105,9 +107,9 @@ string SonnyRobot::name() const {
 }
 
 Point SonnyRobot::targetToLock() {
-
     Point sonny = getCenterMap();
-    Point shortestPoint(0, 0);
+    Point shortestPoint(rand() % 5, rand() % 5);
+    actionType = "move";
 
     for (size_t y = 0; y < internalMap.size(); ++y) {
         for (size_t x = 0; x < internalMap.at(y).size(); ++x) {
@@ -116,13 +118,20 @@ Point SonnyRobot::targetToLock() {
                 Point current(x, y);
                 if (sonny.distance(current) < sonny.distance(shortestPoint)) {
                     shortestPoint = current;
-                    switch(object.at(0)){
+                    switch (object.at(0)) {
                         case 'R':
-                            if (energy < 15){
+                            if (energy > 15) {
+                                if (power > 1) {
+                                    actionType = "attack";
+                                } else {
+                                    actionType = "move";
+                                }
+                            } else {
                                 Point d = current.normalize();
                                 d.x *= -1;
                                 d.y *= -1;
                                 shortestPoint = d;
+                                actionType = "move";
                             }
                             break;
                     }

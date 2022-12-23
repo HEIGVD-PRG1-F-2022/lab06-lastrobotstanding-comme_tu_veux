@@ -30,8 +30,8 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 
 class Game {
-    static const size_t NB_ROBOT = 2;
-    static const size_t SIZE_GRID = NB_ROBOT * 10;
+    static const size_t NB_ROBOT = 8;
+    static const size_t SIZE_GRID = 20;
 
     const unsigned DEFAULT_ENERGY = 10;
     const unsigned DEFAULT_POWER = 1;
