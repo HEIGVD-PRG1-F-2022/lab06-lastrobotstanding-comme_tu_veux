@@ -24,13 +24,29 @@ Compiler        : Mingw-w64 g++ 11.2.0
 class RobotState {
     size_t id;
 
+    /**
+     * Update to execute
+     */
     std::vector<std::string> updates;
+
+    /**
+     * Update to execute on the next round
+     */
     std::vector<std::string> nextUpdates;
 public:
     Robot *robot;
 
     unsigned energy, power;
 
+    /**
+     * Initialize a new robot state
+     * @param id
+     * @param coords
+     * @param robot
+     * @param fieldOfView Size of the square visible by the robot
+     * @param energy
+     * @param power
+     */
     RobotState(size_t id, Point coords, Robot *robot, size_t fieldOfView, unsigned int energy, unsigned int power);
 
     /**
@@ -60,14 +76,6 @@ public:
      * @param update
      */
     void addUpdate(const std::string &update);
-
-    unsigned getPower();
-
-    void setPower(unsigned power);
-
-    unsigned getEnergy();
-
-    void setEnergy(unsigned energy);
 
     void execUpdate();
 

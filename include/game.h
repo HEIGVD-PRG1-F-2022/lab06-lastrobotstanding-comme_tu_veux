@@ -126,10 +126,28 @@ public:
      */
     std::vector<BonusState>::iterator searchBonus(std::vector<BonusState> &b, Point coords, bool enable = true);
 
+    /**
+     * Generate an attack string and update state of the robot
+     * @param coords
+     * @param attacker
+     * @return
+     */
     std::string attack(Point coords, RobotState &attacker);
 
+    /**
+     * Search robot on coords, generate damage taken by the attacker and update state of the robot
+     * @param coords
+     * @param attacker
+     * @return
+     */
     std::string damage(Point coords, RobotState &attacker);
 
+    /**
+     * Generate moving string and update state of the robot
+     * @param coords
+     * @param robot
+     * @return
+     */
     std::string move(Point coords, RobotState &robot);
 };
 

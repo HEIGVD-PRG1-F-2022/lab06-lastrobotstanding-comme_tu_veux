@@ -19,11 +19,20 @@ Compiler        : Mingw-w64 g++ 11.2.0
 
 class BonusState {
 public:
+    /**
+     * Type of bonus
+     */
     enum class Type {
         Energy,
         PowerUp
     };
 
+    /**
+     * Initialize a new BonusState
+     * @param coords
+     * @param bonusType
+     * @param amount
+     */
     BonusState(Point coords, Type bonusType, unsigned amount);
 
     /**
@@ -36,8 +45,16 @@ public:
      */
     Point coords;
 
+    /**
+     * Value of the bonus
+     * @return unsigned amount
+     */
     unsigned getAmount();
 
+    /**
+     * Get the type of bonus
+     * @return enum Type
+     */
     Type getType();
 
 private:

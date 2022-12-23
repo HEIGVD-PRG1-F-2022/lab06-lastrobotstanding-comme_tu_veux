@@ -44,6 +44,7 @@ void Game::startGame() {
 
         display();
 
+        // Call all robot to give them update and retrieve there actions
         for (RobotState &robotState: robotsState) {
             // Skip robotState if dead
             if (robotState.disable) {
@@ -82,6 +83,7 @@ void Game::startGame() {
             roundCount = 1;
         }
 
+        // Move the action of the next update list to the current update list and add by default the board for each robot
         for (RobotState &robotState: this->robotsState) {
             // skip robotState if dead
             if (robotState.disable) {
@@ -113,27 +115,24 @@ void Game::generateRobots(unsigned nbRobots) {
 string Game::damage(const Point coords, RobotState &attacker) {
     string action;
 
-    Point attackerCoords = attacker.coords;
-
-    Point delta = attackerCoords + coords;
-
+    Point delta = attacker.coords + coords;
     // Search robot to attack iterator
     auto robot = searchRobot(robotsState, delta);
 
     if (robot != this->robotsState.end()) {
-        // Add the information that he took damage from attacker
-
         int dist = attacker.coords.distance(robot->coords);
 
-        unsigned attackPower = dist < 2 ? attacker.getPower() * 2 : dist < 3 ? attacker.getPower() : 0;
+        // Calculate the amount of the power to give based on his distance attack
+        unsigned attackPower = dist < 2 ? attacker.power * 2 : dist < 3 ? attacker.power : 0;
 
         action = ActionMsg::generateDamage(attacker.coords, attackPower);
+        robot->energy = robot->energy - attackPower;
 
-        robot->setEnergy(robot->getEnergy() - attackPower);
-
-        if (robot->getEnergy() >= numeric_limits<unsigned>::max() - 100) {
+        // WARNING: here to detect energy overflow I based that a robot will never do more than 1000 damage
+        if (robot->energy >= numeric_limits<unsigned>::max() - 1000) {
             robot->disable = true;
         }
+
         robot->addUpdate(action);
     }
 
@@ -150,7 +149,7 @@ std::string Game::move(Point direction, RobotState &robot) {
 
     // Kill robot with lower energy if on the same spot
     if (robotOnMap != robotsState.end()) {
-        robot.getEnergy() > robotOnMap->getEnergy() ? robot.disable = true : robotOnMap->disable = true;
+        robot.energy > robotOnMap->energy ? robot.disable = true : robotOnMap->disable = true;
     }
 
     // Check if bonus on the map
@@ -262,9 +261,9 @@ void Game::display() {
           << " - "
           << robotState.robot->name()
           << " Energy : "
-          << robotState.getEnergy()
+          << robotState.energy
           << " Power : "
-          << robotState.getPower()
+          << robotState.power
           << " : "
           << (!robotState.getCurrentUpdate().empty() ? robotState.getCurrentUpdate().front() : "")
           << "\n";

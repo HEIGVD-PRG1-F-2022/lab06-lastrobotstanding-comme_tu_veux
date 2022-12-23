@@ -18,6 +18,9 @@ Compiler        : Mingw-w64 g++ 11.2.0
 #include <vector>
 #include "../robots/point.h"
 
+/**
+ * Constant of default action available
+ */
 const std::string BOARD_STRING = "board",
         DAMAGE_STRING = "damage",
         MOVE_STRING = "move",
