@@ -39,7 +39,7 @@ void Game::startGame() {
     while (true) {
         // Generate bonus every 20 rounds
         if (!(roundCount % 20) && roundCount != 0) {
-            generateBoni(20);
+            generateBoni(1);
         }
 
         display();
