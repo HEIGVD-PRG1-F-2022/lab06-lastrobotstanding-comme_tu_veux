@@ -12,7 +12,6 @@ Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
 
-#include <iostream>
 #include <librobots/Message.h>
 
 #include "sonny_robot.h"
@@ -31,15 +30,11 @@ string SonnyRobot::action(vector<string> updates) {
         }
 
         switch (Action::resolveAction(action)) {
-            case Action::NOTDEFINED:
+            case Action::Name::Energy:
+                this->energy += (unsigned) stoi(parameters);
                 break;
-            case Action::MOVE:
-                break;
-            case Action::ATTACK:
-                break;
-            case Action::WAIT:
-                break;
-            case Action::BONUS:
+            case Action::Name::Power:
+                this->power += (unsigned) stoi(parameters);
                 break;
             case Action::Name::BOARD:
                 internalMap = fromStringToMap(parameters);
@@ -102,7 +97,6 @@ void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, uns
     this->mapHeight = height;
     this->energy = energy;
     this->power = power;
-
     this->map= vector(mapHeight, vector<string>(mapWidth, ""));
 }
 
@@ -159,4 +153,3 @@ Point SonnyRobot::getCenterMap() {
     int y = (mapHeight - 1) / 2;
     return {x, y};
 }
-

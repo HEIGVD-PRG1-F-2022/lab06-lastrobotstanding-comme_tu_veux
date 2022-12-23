@@ -46,3 +46,8 @@ void RobotState::setEnergy(unsigned int energy) {
 size_t RobotState::getId() const {
     return this->id;
 }
+
+void RobotState::execUpdate() {
+    this->updates = this->nextUpdates;
+    this->nextUpdates.clear();
+}

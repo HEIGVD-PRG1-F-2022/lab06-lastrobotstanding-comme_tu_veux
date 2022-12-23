@@ -75,6 +75,8 @@ public:
 
     std::string getRobotView(Point coords);
 
+    void getRobotsView(std::vector<RobotState> &r);
+
     /**
      * Generate and add robot entities into the state manager
      * @param nbRobots

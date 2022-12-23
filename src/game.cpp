@@ -32,16 +32,21 @@ void Game::setupGame() {
     this->grid = Map(SIZE_GRID, vector<string>(SIZE_GRID));
 
     generateRobots(Game::NB_ROBOT);
+    generateBoni(120);
 }
 
 void Game::startGame() {
 
     bool attackFlag = false;
 
+    for (RobotState &robotState: robotsState) {
+        robotState.addUpdate(getRobotView(robotState.coords));
+    }
+
     while (true) {
         // Generate bonus every 20 turns
         if (!(roundCount % 20) && roundCount != 0) {
-            generateBoni(1);
+            generateBoni(20);
         }
 
         display();
@@ -51,8 +56,8 @@ void Game::startGame() {
             if (robotState.disable) {
                 continue;
             }
-
-            vector<string> actionParameters = split(robotState.robot->action({getRobotView(robotState.coords)}), " ", 2);
+            string todo = robotState.robot->action(robotState.getCurrentUpdate());
+            vector<string> actionParameters = split(todo, " ", 2);
 
             string action = actionParameters.at(0);
             string parameters = actionParameters.at(1);
@@ -80,6 +85,12 @@ void Game::startGame() {
                 attackFlag = false;
             }
             roundCount = 1;
+        }
+
+        getRobotsView(this->robotsState);
+
+        for (RobotState &robotState: this->robotsState) {
+            robotState.execUpdate();
         }
 
         this_thread::sleep_for(chrono::milliseconds(20));
@@ -142,10 +153,37 @@ std::string Game::move(Point direction, RobotState &robot) {
     // Search robot to attack iterator
     auto robotOnMap = find_if(this->robotsState.begin(), this->robotsState.end(),
                               [&robot](RobotState r) {
-                                  return r.coords == robot.coords;
+                                  return r.coords == robot.coords && robot.getId() != r.getId() && !robot.disable;
                               });
 
-    // TODO: check if there is multiple robot on the same position
+    // Kill robot with lower energy if on the same spot
+    if (robotOnMap != robotsState.end()) {
+        if (robot.getEnergy() < robotOnMap->getEnergy()) {
+            robot.disable = true;
+        } else {
+            robotOnMap->disable = true;
+        }
+    }
+
+    // Check if bonus on the map
+    auto bonus = find_if(this->boniState.begin(), this->boniState.end(), [&robot](BonusState bonusState) {
+        return robot.coords == bonusState.coords && !bonusState.disable;
+    });
+
+    if (bonus != boniState.end()) {
+        switch (bonus->getType()) {
+            case BonusState::Type::Energy:
+                robot.energy += bonus->getAmount();
+                robot.addUpdate("energy " + to_string(bonus->getAmount()));
+                break;
+            case BonusState::Type::PowerUp:
+                robot.power += bonus->getAmount();
+                robot.addUpdate("power " + to_string(bonus->getAmount()));
+                break;
+        }
+
+        bonus->disable = true;
+    }
 
     robot.coords += direction.normalize();
 
@@ -211,13 +249,6 @@ void Game::display() {
         }
     }
 
-    for (const auto &robot: robotsState) {
-        if (robot.disable) {
-            continue;
-        }
-        grid.at((size_t) robot.coords.y).at((size_t) robot.coords.x) = "R";
-    }
-
     for (const auto &bonus: boniState) {
         if (bonus.disable) {
             continue;
@@ -225,29 +256,73 @@ void Game::display() {
         grid.at((size_t) bonus.coords.y).at((size_t) bonus.coords.x) = "B";
     }
 
+    for (const auto &robot: robotsState) {
+        if (robot.disable) {
+            continue;
+        }
+        grid.at((size_t) robot.coords.y).at((size_t) robot.coords.x) = "R";
+    }
+
     // Display grid with libdio
     Display::saveCursorPosition();
     cout << Display::displayGrid<string>(grid, false);
+
+    Display::DString d;
+
+    d << "\n";
+
+    for (RobotState robotState: robotsState) {
+        d << to_string(robotState.getId())
+          << " - "
+          << robotState.robot->name()
+          << " Energy : "
+          << robotState.getEnergy()
+          << " Power : "
+          << robotState.getPower()
+          << " : "
+          << (!robotState.getCurrentUpdate().empty() ? robotState.getCurrentUpdate().back() : "")
+          << "\n";
+    }
+    d.print();
+
     Display::restoreCursorPosition();
 }
 
 std::string Game::getRobotView(Point coords) {
-    int topLeft = int(DEFAULT_FIELDOFVIEW -1 / 2);
-    coords -= Point(topLeft,topLeft);
+    size_t offset = int(DEFAULT_FIELDOFVIEW - 1 / 2);
 
     string map;
 
-    for(size_t y = 0; y < DEFAULT_FIELDOFVIEW; ++y){
-        for(size_t x = 0; x < DEFAULT_FIELDOFVIEW; ++x) {
-            Point s = coords + Point(x,y);
-            Point::wrap(s, 0, SIZE_GRID -1);
+    for (size_t y = 0; y < DEFAULT_FIELDOFVIEW; ++y) {
+        for (size_t x = 0; x < DEFAULT_FIELDOFVIEW; ++x) {
+            Point s = coords + Point(x - offset, y - offset);
+            Point::wrap(s, 0, SIZE_GRID - 1);
 
-            map.push_back((grid.at((size_t)s.y).at((size_t)s.x).empty() ? ' ' : grid.at((size_t)s.y).at((size_t)s.x).at(0)));
+            auto robot = find_if(robotsState.begin(), robotsState.end(), [&s](RobotState &r) { return r.coords == s && !r.disable; });
+            auto bonus = find_if(boniState.begin(), boniState.end(), [&s](BonusState &b) { return b.coords == s && !b.disable; });
+
+            string entity = " ";
+
+            if (robot != robotsState.end()) {
+                entity = 'R';
+            }
+
+            if (bonus != boniState.end()) {
+                entity = 'B';
+            }
+
+            map += entity;
         }
     }
 
 
     return "board " + map;
+}
+
+void Game::getRobotsView(vector<RobotState> &r) {
+    for (RobotState robotState: r) {
+        robotState.addUpdate(getRobotView(robotState.coords));
+    }
 }
 
 

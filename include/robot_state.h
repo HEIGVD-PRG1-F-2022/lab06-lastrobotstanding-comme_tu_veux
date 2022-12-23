@@ -24,12 +24,12 @@ Compiler        : Mingw-w64 g++ 11.2.0
 class RobotState {
     size_t id;
 
-    unsigned energy, power;
-
     std::vector<std::string> updates;
     std::vector<std::string> nextUpdates;
 public:
     Robot *robot;
+
+    unsigned energy, power;
 
     RobotState(size_t id, Point coords, Robot *robot, size_t fieldOfView, unsigned int energy, unsigned int power);
 
@@ -68,6 +68,8 @@ public:
     unsigned getEnergy();
 
     void setEnergy(unsigned energy);
+
+    void execUpdate();
 
 
 };

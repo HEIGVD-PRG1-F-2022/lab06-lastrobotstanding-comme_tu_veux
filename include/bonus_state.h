@@ -38,6 +38,8 @@ public:
 
     unsigned getAmount();
 
+    Type getType();
+
 private:
     unsigned amount;
     BonusState::Type bonusType;

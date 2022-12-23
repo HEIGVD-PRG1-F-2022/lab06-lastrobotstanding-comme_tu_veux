@@ -23,3 +23,7 @@ BonusState::BonusState(Point coords, Type bonusType, unsigned amount) {
 unsigned BonusState::getAmount() {
     return this->amount;
 }
+
+BonusState::Type BonusState::getType() {
+    return this->bonusType;
+}

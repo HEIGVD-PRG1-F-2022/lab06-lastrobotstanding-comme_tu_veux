@@ -27,6 +27,10 @@ Action::Name Action::resolveAction(std::string &action) {
         return Action::Name::ATTACK;
     if (action == WAIT_STRING)
         return Action::Name::WAIT;
+    if (action == POWER_STRING)
+        return Action::Name::Power;
+    if (action == ENERGY_STRING)
+        return Action::Name::Energy;
 
     return Action::Name::NOTDEFINED;
 }

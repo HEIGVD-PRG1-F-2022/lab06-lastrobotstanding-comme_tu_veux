@@ -22,6 +22,8 @@ const std::string DAMAGE_STRING = "damage";
 const std::string MOVE_STRING = "move";
 const std::string ATTACK_STRING = "attack";
 const std::string WAIT_STRING = "wait";
+const std::string POWER_STRING = "power";
+const std::string ENERGY_STRING = "energy";
 
 class Action {
 public:
@@ -32,7 +34,9 @@ public:
         MOVE,
         ATTACK,
         WAIT,
-        BONUS
+        BONUS,
+        Energy,
+        Power,
     };
 
     static Name resolveAction(std::string &action);

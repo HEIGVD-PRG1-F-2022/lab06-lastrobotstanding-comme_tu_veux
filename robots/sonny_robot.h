@@ -31,6 +31,8 @@ class SonnyRobot : public Robot {
     unsigned energy = 0, power = 0;
     unsigned counter = 0;
 
+    std::string actionType;
+
     Point target;
     Point targetToLock();
 
