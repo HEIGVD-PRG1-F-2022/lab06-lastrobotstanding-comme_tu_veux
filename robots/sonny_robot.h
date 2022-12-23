@@ -38,7 +38,7 @@ class SonnyRobot : public Robot {
 
     Point attacker;
 
-    Point getCenterMap();
+    [[nodiscard]] Point getCenterMap() const;
 
     std::vector<std::vector<std::string>> internalMap;
     std::vector<std::vector<std::string>> map;

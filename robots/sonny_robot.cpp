@@ -104,10 +104,10 @@ Point SonnyRobot::targetToLock() {
 vector<vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
     vector<vector<string>> mapVector;
 
-    for (size_t y = 0; y < FIELD_OF_VIEW; ++y) {
+    for (size_t y = 0; y < (size_t)FIELD_OF_VIEW; ++y) {
         vector<string> line;
         for (size_t x = 0; x < FIELD_OF_VIEW; ++x) {
-            int offset = y * (FIELD_OF_VIEW);
+            size_t offset = y * (size_t)FIELD_OF_VIEW;
             string car = map.substr(x + offset, 1);
             line.push_back(car == " " ? "" : car);
         }
@@ -116,8 +116,8 @@ vector<vector<string>> SonnyRobot::fromStringToMap(const std::string map) {
     return mapVector;
 }
 
-Point SonnyRobot::getCenterMap() {
-    int x = (mapWidth - 1) / 2;
-    int y = (mapHeight - 1) / 2;
+Point SonnyRobot::getCenterMap() const {
+    int x = int(mapWidth - 1) / 2;
+    int y = int(mapHeight - 1) / 2;
     return {x, y};
 }
