@@ -13,13 +13,19 @@ Compiler        : Mingw-w64 g++ 11.2.0
 */
 
 #include <librobots/Message.h>
-#include <stdlib.h>
-#include <time.h>
 
 #include "sonny_robot.h"
-#include "action.h"
+#include "robot_action_msg.h"
 
 using namespace std;
+
+void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
+    this->mapWidth = width;
+    this->mapHeight = height;
+    this->energy = energy;
+    this->power = power;
+    this->map= vector(mapHeight, vector<string>(mapWidth, ""));
+}
 
 string SonnyRobot::action(vector<string> updates) {
     for (const string &update: updates) {
@@ -31,17 +37,19 @@ string SonnyRobot::action(vector<string> updates) {
             parameters = actionParameters.at(1);
         }
 
-        switch (Action::resolveAction(action)) {
-            case Action::Name::Energy:
+        switch (RobotActionMsg::resolveAction(action)) {
+            case RobotActionMsg::Name::BONUS:
+                break;
+            case RobotActionMsg::Name::Energy:
                 this->energy += (unsigned) stoi(parameters);
                 break;
-            case Action::Name::Power:
+            case RobotActionMsg::Name::Power:
                 this->power += (unsigned) stoi(parameters);
                 break;
-            case Action::Name::BOARD:
+            case RobotActionMsg::Name::BOARD:
                 internalMap = fromStringToMap(parameters);
                 break;
-            case Action::Name::DAMAGE:
+            case RobotActionMsg::Name::DAMAGE:
                 vector<string> damageInfo = split(parameters, ",", 3);
                 attacker = Point(damageInfo.at(0), damageInfo.at(1));
                 energy -= (unsigned) stoi(damageInfo.at(2));
@@ -55,51 +63,6 @@ string SonnyRobot::action(vector<string> updates) {
     ++counter;
 
     return actionType + " " + (string) target.normalize();
-}
-
-/*
- * 	Cherche Bonus : si robot plus proche de bonus regarde si il peut attack sinon fuite
- * 	attack robot seulement si energy suffisante
- * 	move diagonale
- */
-
-/*  string action = " ";
-
-    if(BONUS){
-        if (!robot){
-            cout << "go to Bonus";
-        } else{
-            if (posBonus - posSonny < posBonus - posRobot){
-                cout << "go to Bonus";
-            } else if(energy > 5 + nbrRound){
-                cout << "ATTACK" << endl;
-            }else{
-                cout << "MOVE" << endl;
-            }
-        }
-
-   if (robot){
-       if(energy > 5 + nbrRound){
-           cout << "ATTACK" << endl;
-       }else{
-           cout << "MOVE" << endl;
-       }
-   }
-
-   else{
-            action = "move -2,-2";
-    }
-
-    return action;
-}*/
-
-
-void SonnyRobot::setConfig(size_t width, size_t height, unsigned int energy, unsigned int power) {
-    this->mapWidth = width;
-    this->mapHeight = height;
-    this->energy = energy;
-    this->power = power;
-    this->map= vector(mapHeight, vector<string>(mapWidth, ""));
 }
 
 string SonnyRobot::name() const {
@@ -120,12 +83,8 @@ Point SonnyRobot::targetToLock() {
                     shortestPoint = current;
                     switch (object.at(0)) {
                         case 'R':
-                            if (energy > 15) {
-                                if (power > 1) {
-                                    actionType = "attack";
-                                } else {
-                                    actionType = "move";
-                                }
+                            if (energy > 5 && counter > 50) {
+                                actionType = "attack";
                             } else {
                                 Point d = current.normalize();
                                 d.x *= -1;

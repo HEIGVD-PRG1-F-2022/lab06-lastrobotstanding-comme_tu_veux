@@ -52,12 +52,18 @@ class Game {
 public:
     Game();
 
+    /**
+     * Initialize the grid and the starting number of robots
+     */
     void setupGame();
 
+    /**
+     * Start the main game loop
+     */
     void startGame();
 
     /**
-     * Display gameboard with all entites
+     * Display game board with all entities
      */
     void display();
 
@@ -73,9 +79,12 @@ public:
      */
     size_t getUniqueRobotId();
 
-    std::string getRobotView(Point coords);
-
-    void getRobotsView(std::vector<RobotState> &r);
+    /**
+     *
+     * @param coords
+     * @return
+     */
+    std::string getRobotBoard(Point coords);
 
     /**
      * Generate and add robot entities into the state manager
@@ -89,14 +98,39 @@ public:
      */
     void generateBoni(unsigned nbBoni);
 
+    /**
+     * Search for a robot at a coords, by default it will check if it's alive
+     * @param r vector<RobotState> list all robot states
+     * @param coords x,y point to check
+     * @param alive if you want it alive or not, be default it's alive
+     * @return iterator of the founded robot, if not it will be the last iteration of the vector
+     */
+    std::vector<RobotState>::iterator searchRobot(std::vector<RobotState> &r, Point coords, bool alive = true);
+
+    /**
+     * Search for a robot at a coords, by default it will check if it's alive
+     * @param r vector<RobotState> list of all robot states
+     * @param coords x,y point to check
+     * @param id size_t id to ignore of the robot to search
+     * @param alive if you want it alive or not, be default it's alive
+     * @return iterator of the founded robot, if not it will be the last iteration of the vector
+     */
+    std::vector<RobotState>::iterator searchRobot(std::vector<RobotState> &r, Point coords, size_t id, bool alive = true);
+
+    /**
+     * Search for a bonus at a coords, by default it will check if it's enable on the board
+     * @param b vector<BonusState> list of all bonus
+     * @param coords x,y point to check
+     * @param enable if the bonus is active on the board
+     * @return iterator of the founded bonus, if not it will be the last iteration of the vector
+     */
+    std::vector<BonusState>::iterator searchBonus(std::vector<BonusState> &b, Point coords, bool enable = true);
+
     std::string attack(Point coords, RobotState &attacker);
 
     std::string damage(Point coords, RobotState &attacker);
 
     std::string move(Point coords, RobotState &robot);
-
-
-    bool isRobotAt(Point coords);
 };
 
 #endif // ROBOT_GAME_H

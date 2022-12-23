@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------------
 Project Name    : lab06-lastrobotstanding-comme_tu_veux
-File's Name     : action.h
+File's Name     : robot_action.h
 Author          :   Aellen Quentin
                     Atasever Mehmet
                     Salamin Chloé
@@ -11,7 +11,7 @@ Remarque(s)     :
 Compiler        : Mingw-w64 g++ 11.2.0
 -----------------------------------------------------------------------------------
 */
-#ifndef ROBOT_ACTION_H
+#ifndef ROBOT_ACTION_MSG_H
 #define ROBOT_ACTION_H
 
 #include <string>
@@ -25,23 +25,23 @@ const std::string WAIT_STRING = "wait";
 const std::string POWER_STRING = "power";
 const std::string ENERGY_STRING = "energy";
 
-class Action {
+class RobotActionMsg {
 public:
     enum Name {
         NOTDEFINED,
         BOARD,
         DAMAGE,
-        MOVE,
-        ATTACK,
-        WAIT,
         BONUS,
         Energy,
         Power,
     };
 
+    /**
+     * Convert string of a specified action to it's corresponding enum
+     * @param action string to convert
+     * @return the specific enum of the action
+     */
     static Name resolveAction(std::string &action);
-
-    static std::string generateDamage(Point coords, unsigned int energy);
 };
 
-#endif //ROBOT_ACTION_H
+#endif //ROBOT_ACTION_MSG_H

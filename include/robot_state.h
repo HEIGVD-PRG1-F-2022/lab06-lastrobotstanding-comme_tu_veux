@@ -50,7 +50,7 @@ public:
     Point coords;
 
     /**
-     * Give a list of all the robot need to do
+     * Give a list of all update action the robot need to be done
      * @return
      */
     std::vector<std::string> getCurrentUpdate();
